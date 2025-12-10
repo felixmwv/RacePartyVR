@@ -10,11 +10,6 @@ public class RaceManager : MonoBehaviour
    [SerializeField] private TextMeshProUGUI bestLapTimeText;
    [SerializeField] private TextMeshProUGUI lapText;
    
-   [SerializeField] private TextMeshProUGUI currentLapTimeText2;
-   [SerializeField] private TextMeshProUGUI overallRaceTimeText2;
-   [SerializeField] private TextMeshProUGUI bestLapTimeText2;
-   [SerializeField] private TextMeshProUGUI lapText2;
-   
    [SerializeField] private Checkpoint[] checkpoints;
    [SerializeField] private int lastCheckpointIndex = -1;
    [SerializeField] private bool isCircuit;
@@ -122,11 +117,6 @@ public class RaceManager : MonoBehaviour
       overallRaceTimeText.text = FormatTime(overallRaceTime);
       lapText.text = "Lap: " + currentLap + "/" + totalLaps;
       bestLapTimeText.text = FormatTime(bestLapTime);
-      
-      currentLapTimeText2.text = FormatTime(currentLapTime);
-      overallRaceTimeText2.text = FormatTime(overallRaceTime);
-      lapText2.text = "Lap: " + currentLap + "/" + totalLaps;
-      bestLapTimeText2.text = FormatTime(bestLapTime);
    }
 
    private string FormatTime(float time)
