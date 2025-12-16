@@ -25,9 +25,36 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "Drive",
+                    "name": "ShiftUp",
+                    "type": "Button",
+                    "id": "6a5e5df7-b0cd-4593-bef4-232e59d3dd82",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "ShiftDown",
+                    "type": "Button",
+                    "id": "7d58631e-b935-4ccf-a6e2-c099a7e0c1c1",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Brake",
                     "type": "Value",
-                    "id": "6e8feec1-da39-4064-a4a2-a532bdab4bac",
+                    "id": "289cecce-4852-470d-bbf5-d3a4e23115b6",
+                    "expectedControlType": "Axis",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                },
+                {
+                    "name": "Throttle",
+                    "type": "Value",
+                    "id": "db29a4a9-5686-44ee-9808-f916e2a6b501",
                     "expectedControlType": "Axis",
                     "processors": "",
                     "interactions": "",
@@ -80,37 +107,48 @@
                     "isPartOfComposite": false
                 },
                 {
-                    "name": "1D Axis",
-                    "id": "938397c3-e2de-4fb5-a118-d602e107b99a",
-                    "path": "1DAxis(whichSideWins=2)",
+                    "name": "",
+                    "id": "b436d028-9008-4541-8c78-bb8d8168002d",
+                    "path": "<Gamepad>/rightShoulder",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Drive",
-                    "isComposite": true,
+                    "action": "ShiftUp",
+                    "isComposite": false,
                     "isPartOfComposite": false
                 },
                 {
-                    "name": "negative",
-                    "id": "b77c6bdc-6706-4779-8d68-a7891c377187",
-                    "path": "<Gamepad>/leftTrigger",
+                    "name": "",
+                    "id": "219e86a4-cdb2-42c5-bd2e-eb5b7bfeb987",
+                    "path": "<Gamepad>/leftShoulder",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Drive",
+                    "action": "ShiftDown",
                     "isComposite": false,
-                    "isPartOfComposite": true
+                    "isPartOfComposite": false
                 },
                 {
-                    "name": "positive",
-                    "id": "76a207b2-3827-4ffb-998a-b18da8a1764b",
+                    "name": "",
+                    "id": "e9b4fd81-98b5-47fe-93c7-a4fb813c14aa",
+                    "path": "<Gamepad>/leftTrigger",
+                    "interactions": "",
+                    "processors": "AxisDeadzone",
+                    "groups": "",
+                    "action": "Brake",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "e8a524fd-56b7-474b-9ce3-7f71823e1a9d",
                     "path": "<Gamepad>/rightTrigger",
                     "interactions": "",
-                    "processors": "",
+                    "processors": "AxisDeadzone",
                     "groups": "",
-                    "action": "Drive",
+                    "action": "Throttle",
                     "isComposite": false,
-                    "isPartOfComposite": true
+                    "isPartOfComposite": false
                 }
             ]
         }

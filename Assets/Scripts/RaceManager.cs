@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class RaceManager : MonoBehaviour
 {
-   public static RaceManager Instance;
    [SerializeField] private TextMeshProUGUI currentLapTimeText;
    [SerializeField] private TextMeshProUGUI overallRaceTimeText;
    [SerializeField] private TextMeshProUGUI bestLapTimeText;
@@ -26,14 +25,7 @@ public class RaceManager : MonoBehaviour
 
    private void Awake()
    {
-      if (Instance == null)
-      {
-         Instance = this;
-      }
-      else
-      {
-         Destroy(gameObject);
-      }
+      FindCheckpoints();
    }
 
    private void Update()
@@ -44,6 +36,20 @@ public class RaceManager : MonoBehaviour
       }
       UpdateUI();
    }
+   private void FindCheckpoints()
+   {
+      GameObject checkpointsParent = GameObject.Find("Checkpoints");
+      if (checkpointsParent == null)
+      {
+         Debug.LogError("No 'Checkpoints' object found in scene.");
+         return;
+      }
+
+      checkpoints = checkpointsParent.GetComponentsInChildren<Checkpoint>();
+
+      Array.Sort(checkpoints, (a, b) => a.checkpointIndex.CompareTo(b.checkpointIndex));
+   }
+
 
    public void CheckPointReached(int checkpointIndex)
    {
@@ -53,6 +59,7 @@ public class RaceManager : MonoBehaviour
       {
          UpdateCheckpoint(checkpointIndex);
       }
+      Debug.Log($"{gameObject.name} hit checkpoint {checkpointIndex}");
    }
 
    public void UpdateCheckpoint(int checkpointIndex)
