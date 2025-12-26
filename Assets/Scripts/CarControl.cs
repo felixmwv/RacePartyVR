@@ -1,6 +1,7 @@
 using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using Unity.Cinemachine;
 
 public class CarControl : MonoBehaviour
 {
@@ -13,9 +14,12 @@ public class CarControl : MonoBehaviour
     public float centreOfGravityOffset = -1f;
 
     [Header("Camera Setup")]
-    [SerializeField] private Camera playerCamera;
+    [SerializeField] private CinemachineCamera playerCamera;
     [SerializeField] private Transform cameraPoint1;
     [SerializeField] private Transform cameraPoint2;
+    [SerializeField] private float maximumOrbitDistance = 10f;
+    [SerializeField] private float minimumOrbitDistance = 2f;
+    private float orbitRadius = 5f;
 
     [Header("UI")]
     public TMP_Text speedometer;
@@ -199,7 +203,6 @@ public class CarControl : MonoBehaviour
     public void OnThrottle(InputAction.CallbackContext ctx)
     {
         throttleInput = ctx.ReadValue<float>();
-        Debug.Log(throttleInput);
     }
 
     public void OnBrake(InputAction.CallbackContext ctx)
@@ -216,7 +219,7 @@ public class CarControl : MonoBehaviour
     {
         if (ctx.performed) switchCameraPressed = true;
     }
-
+    
     public void OnShiftUp(InputAction.CallbackContext ctx)
     {
         if (!ctx.performed) return;
