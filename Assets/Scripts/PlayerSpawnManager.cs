@@ -12,8 +12,15 @@ public class PlayerSpawnManager : MonoBehaviour
     {
         Transform spawnPoint = spawnPoints[nextSpawnIndex];
 
-        playerInput.transform.position = spawnPoint.position;
-        playerInput.transform.rotation = spawnPoint.rotation;
+        Rigidbody rb = playerInput.GetComponent<Rigidbody>();
+
+        rb.velocity = Vector3.zero;
+        rb.angularVelocity = Vector3.zero;
+
+        rb.position = spawnPoint.position;
+        rb.rotation = spawnPoint.rotation;
+
+        rb.Sleep();
 
         nextSpawnIndex = (nextSpawnIndex + 1) % spawnPoints.Length;
     }

@@ -10080,16 +10080,10 @@ MonoBehaviour:
   motorTorque: 3000
   brakeTorque: 3000
   maxSpeed: 35
+  minSteeringAngle: 12
   steeringRange: 30
   steeringRangeAtMaxSpeed: 10
   centreOfGravityOffset: -1
-  playerCamera: {fileID: 0}
-  cameraPoint1: {fileID: 0}
-  cameraPoint2: {fileID: 0}
-  maximumOrbitDistance: 10
-  minimumOrbitDistance: 2
-  speedometer: {fileID: 1551275430}
-  gearIndicator: {fileID: 0}
   maxSteerSpeed: 2
   engineTorque: 400
   finalDrive: 3.4
@@ -10131,6 +10125,13 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+  playerCamera: {fileID: 0}
+  cameraPoint1: {fileID: 0}
+  cameraPoint2: {fileID: 0}
+  maximumOrbitDistance: 10
+  minimumOrbitDistance: 2
+  speedometer: {fileID: 1551275430}
+  gearIndicator: {fileID: 0}
 --- !u!64 &1540907368
 MeshCollider:
   m_ObjectHideFlags: 0

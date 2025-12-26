@@ -5,29 +5,19 @@ using Unity.Cinemachine;
 
 public class CarControl : MonoBehaviour
 {
+    // PUBLIC VARIABLES
+
     [Header("Car Properties")]
     public float motorTorque = 5000f;
     public float brakeTorque = 5000f;
     public float maxSpeed = 60f;
-    public float steeringRange = 36f;
+    public float minSteeringAngle = 0f;
+    public float steeringRange = 30f;
     public float steeringRangeAtMaxSpeed = 12f;
-    public float centreOfGravityOffset = -1f;
-
-    [Header("Camera Setup")]
-    [SerializeField] private CinemachineCamera playerCamera;
-    [SerializeField] private Transform cameraPoint1;
-    [SerializeField] private Transform cameraPoint2;
-    [SerializeField] private float maximumOrbitDistance = 10f;
-    [SerializeField] private float minimumOrbitDistance = 2f;
-    private float orbitRadius = 5f;
-
-    [Header("UI")]
-    public TMP_Text speedometer;
-    public TMP_Text gearIndicator;
+    public float centreOfGravityOffset = -0.6f;
 
     [Header("Steering")]
     public float maxSteerSpeed = 2f;
-    private float smoothSteerInput;
 
     [Header("Drivetrain")]
     public float engineTorque = 400f;
@@ -45,19 +35,35 @@ public class CarControl : MonoBehaviour
         new Keyframe(1f, 0.1f)
     );
 
-    private float engineRPM;
-    private int currentGear = 0;
-    public int MaxGear => gearRatios.Length;
+    [Header("Camera Setup")]
+    [SerializeField] private CinemachineCamera playerCamera;
+    [SerializeField] private Transform cameraPoint1;
+    [SerializeField] private Transform cameraPoint2;
+    [SerializeField] private float maximumOrbitDistance = 10f;
+    [SerializeField] private float minimumOrbitDistance = 2f;
+
+    [Header("UI")]
+    public TMP_Text speedometer;
+    public TMP_Text gearIndicator;
+    
+    // PRIVATE VARIABLES
 
     private Rigidbody rb;
     private WheelControl[] wheels;
 
+    private float smoothSteerInput;
     private float throttleInput;
     private float brakeInput;
     private float hInput;
 
+    private float engineRPM;
+    private int currentGear = 0;
+    public int MaxGear => gearRatios.Length;
+
     private bool switchCameraPressed;
     private bool usingPoint1 = true;
+    
+    // UNITY LIFECYCLE
 
     void Awake()
     {
@@ -92,47 +98,57 @@ public class CarControl : MonoBehaviour
 
     void FixedUpdate()
     {
-        float speed = rb.linearVelocity.magnitude;
-        float speedKph = speed * 3.6f;
-        float speed01 = Mathf.InverseLerp(0, maxSpeed, speed);
-        
-        smoothSteerInput = Mathf.MoveTowards(smoothSteerInput, hInput, maxSteerSpeed * Time.fixedDeltaTime);
+        float speedKph = rb.linearVelocity.magnitude * 3.6f;
+        float speed = Mathf.InverseLerp(0f, maxSpeed, speedKph);
 
-        float lowSpeedBoost = Mathf.Lerp(1.4f, 1f, speed01);
-        float currentSteerRange = Mathf.Lerp(steeringRange, steeringRangeAtMaxSpeed, speed01) * lowSpeedBoost;
+        // Steering
 
-        float steer01 = Mathf.Abs(smoothSteerInput);
-        float steerLimiterStrength = Mathf.Lerp(0f, 0.5f, speed01);
-        float torqueSteerLimiter = 1f - steer01 * steerLimiterStrength;
-        
+        float steerInput = Mathf.Sign(hInput) * hInput * hInput;
+
+        smoothSteerInput = Mathf.MoveTowards(
+            smoothSteerInput,
+            steerInput,
+            maxSteerSpeed * Time.fixedDeltaTime
+        );
+
+        float targetSteerRange = Mathf.Lerp(steeringRange, steeringRangeAtMaxSpeed, speed);
+        float currentSteerRange = Mathf.Clamp(targetSteerRange, minSteeringAngle, steeringRange);
+
+        // Engine RPM
+
         float wheelRPM = 0f;
         int driven = 0;
 
         foreach (var w in wheels)
         {
-            if (!w.motorized) continue; wheelRPM += w.WheelCollider.rpm; driven++;
+            if (!w.motorized) continue;
+            wheelRPM += w.WheelCollider.rpm;
+            driven++;
         }
 
         if (driven > 0) wheelRPM /= driven;
 
         if (currentGear > 0)
-        {
             engineRPM = Mathf.Abs(wheelRPM) * gearRatios[currentGear - 1] * finalDrive;
-        }
         else
-        {
             engineRPM = Mathf.Lerp(engineRPM, idleRPM, Time.fixedDeltaTime * 5f);
-        }
 
         engineRPM = Mathf.Clamp(engineRPM, idleRPM, redlineRPM);
+
         float rpm01 = Mathf.InverseLerp(idleRPM, redlineRPM, engineRPM);
         float torqueFromRPM = torqueCurve.Evaluate(rpm01);
+
+        // Torque Output
         
         float gearLimiter = 1f;
 
         if (currentGear > 0 && currentGear - 1 < gearMaxSpeeds.Length)
         {
-            float limit01 = Mathf.InverseLerp(gearMaxSpeeds[currentGear - 1] - 5f, gearMaxSpeeds[currentGear - 1], speedKph);
+            float limit01 = Mathf.InverseLerp(
+                gearMaxSpeeds[currentGear - 1] - 5f,
+                gearMaxSpeeds[currentGear - 1],
+                speedKph
+            );
 
             gearLimiter = 1f - Mathf.Clamp01(limit01);
         }
@@ -140,90 +156,59 @@ public class CarControl : MonoBehaviour
         float finalMotorTorque = 0f;
 
         if (currentGear > 0)
-        {
-            finalMotorTorque = engineTorque * torqueFromRPM * gearRatios[currentGear - 1] * finalDrive * torqueSteerLimiter * gearLimiter * 10f;
-        }
+            finalMotorTorque = engineTorque * torqueFromRPM *
+                                 gearRatios[currentGear - 1] *
+                                 finalDrive * gearLimiter * 10f;
         else if (currentGear == -1)
-        {
-            finalMotorTorque = engineTorque * torqueFromRPM * finalDrive * torqueSteerLimiter * gearLimiter * 6f;
-        }
+            finalMotorTorque = engineTorque * torqueFromRPM *
+                                 finalDrive * gearLimiter * 6f;
+
+        // Vehicle Dynamics
+
+        Vector3 localAV = transform.InverseTransformDirection(rb.angularVelocity);
+        float yawDamping = Mathf.Lerp(0.08f, 0.18f, speed);
+        localAV.y *= (1f - yawDamping);
+        rb.angularVelocity = transform.TransformDirection(localAV);
+
+        // Wheels
 
         bool applyingThrottle = throttleInput > 0.01f;
         bool applyingBrake = brakeInput > 0.01f;
         bool revLimiter = engineRPM >= redlineRPM - 100f;
         float throttle01 = Mathf.Clamp01(throttleInput);
 
-        float rollingTorque = 0f;
-        if (!applyingThrottle && currentGear > 0)
-            rollingTorque = engineTorque * 0.05f;
-        
-        Vector3 localAV = transform.InverseTransformDirection(rb.angularVelocity);
-        float yawDamping = Mathf.Lerp(0.15f, 0.5f, speed01);
-        localAV.y *= (1f - yawDamping);
-        rb.angularVelocity = transform.TransformDirection(localAV);
-
         foreach (var wheel in wheels)
         {
             if (wheel.steerable)
-            {
                 wheel.WheelCollider.steerAngle = smoothSteerInput * currentSteerRange;
-            }
 
             wheel.WheelCollider.motorTorque = 0f;
             wheel.WheelCollider.brakeTorque = 0f;
-            
+
             if (applyingThrottle && wheel.motorized && !revLimiter)
             {
                 float dir = currentGear == -1 ? -1f : 1f;
-                wheel.WheelCollider.motorTorque = (finalMotorTorque * throttle01 + rollingTorque) * dir;
+                wheel.WheelCollider.motorTorque = finalMotorTorque * throttle01 * dir;
             }
-            
+
             if (applyingBrake)
             {
                 float bias = wheel.motorized ? 0.8f : 1.2f;
                 wheel.WheelCollider.brakeTorque = brakeInput * brakeTorque * bias;
             }
-            
-            if (!applyingThrottle && !applyingBrake && currentGear != 0)
-            {
-                float engineBrake = wheel.motorized ? 150f : 350f;
-
-                wheel.WheelCollider.brakeTorque += engineBrake;
-            }
-            
-            if (!applyingThrottle && wheel.steerable)
-            {
-                WheelFrictionCurve side = wheel.WheelCollider.sidewaysFriction;
-                side.stiffness = 1.15f;
-                wheel.WheelCollider.sidewaysFriction = side;
-            }
         }
     }
-
-    public void OnThrottle(InputAction.CallbackContext ctx)
-    {
-        throttleInput = ctx.ReadValue<float>();
-    }
-
-    public void OnBrake(InputAction.CallbackContext ctx)
-    {
-        brakeInput = ctx.ReadValue<float>();
-    }
-
-    public void OnSteer(InputAction.CallbackContext ctx)
-    {
-        hInput = ctx.ReadValue<float>();
-    }
-
-    public void OnSwitchCamera(InputAction.CallbackContext ctx)
-    {
-        if (ctx.performed) switchCameraPressed = true;
-    }
     
+    // INPUT
+
+    public void OnThrottle(InputAction.CallbackContext ctx) => throttleInput = ctx.ReadValue<float>();
+    public void OnBrake(InputAction.CallbackContext ctx) => brakeInput = ctx.ReadValue<float>();
+    public void OnSteer(InputAction.CallbackContext ctx) => hInput = ctx.ReadValue<float>();
+
     public void OnShiftUp(InputAction.CallbackContext ctx)
     {
-        if (!ctx.performed) return;
-        currentGear = Mathf.Min(currentGear + 1, MaxGear);
+        if (ctx.performed)
+            currentGear = Mathf.Min(currentGear + 1, MaxGear);
     }
 
     public void OnShiftDown(InputAction.CallbackContext ctx)
@@ -235,6 +220,13 @@ public class CarControl : MonoBehaviour
 
         currentGear = Mathf.Max(currentGear - 1, -1);
     }
+
+    public void OnSwitchCamera(InputAction.CallbackContext ctx)
+    {
+        if (ctx.performed) switchCameraPressed = true;
+    }
+    
+    // CAMERA
 
     void SwitchCamera()
     {
