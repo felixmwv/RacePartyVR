@@ -237,12 +237,62 @@
                     "isPartOfComposite": false
                 }
             ]
+        },
+        {
+            "name": "Rumble",
+            "id": "46f4f6b0-a247-4f97-a32a-e605e082daa0",
+            "actions": [
+                {
+                    "name": "RumbleAction",
+                    "type": "PassThrough",
+                    "id": "2ccd3ad2-90e6-45e4-afef-dfe0ad75ff20",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "49cb8984-ca4c-463d-80d7-760d55a6865b",
+                    "path": "<Gamepad>/rightTrigger",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "RumbleAction",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "d6b83376-d0f1-4ce6-9a7d-b3a762122158",
+                    "path": "<Keyboard>/1",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "RumbleAction",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
         }
     ],
     "controlSchemes": [
         {
-            "name": "New Control Scheme",
-            "bindingGroup": "New Control Scheme",
+            "name": "GamePad",
+            "bindingGroup": "GamePad",
+            "devices": [
+                {
+                    "devicePath": "<Gamepad>",
+                    "isOptional": false,
+                    "isOR": false
+                }
+            ]
+        },
+        {
+            "name": "New Control Scheme1",
+            "bindingGroup": "New Control Scheme1",
             "devices": [
                 {
                     "devicePath": "<Gamepad>",

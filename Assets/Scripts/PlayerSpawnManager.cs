@@ -14,7 +14,7 @@ public class PlayerSpawnManager : MonoBehaviour
 
         Rigidbody rb = playerInput.GetComponent<Rigidbody>();
 
-        rb.velocity = Vector3.zero;
+        rb.linearVelocity = Vector3.zero;
         rb.angularVelocity = Vector3.zero;
 
         rb.position = spawnPoint.position;
