@@ -174,7 +174,7 @@ public partial class @PlayerSplitScreen: IInputActionCollection2, IDisposable
                     ""path"": ""<Gamepad>/leftStick/left"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": """",
+                    ""groups"": "";GamePad"",
                     ""action"": ""Steer"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
@@ -185,7 +185,7 @@ public partial class @PlayerSplitScreen: IInputActionCollection2, IDisposable
                     ""path"": ""<Gamepad>/leftStick/right"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": """",
+                    ""groups"": "";GamePad"",
                     ""action"": ""Steer"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
@@ -207,7 +207,7 @@ public partial class @PlayerSplitScreen: IInputActionCollection2, IDisposable
                     ""path"": ""<Gamepad>/dpad/left"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": """",
+                    ""groups"": "";GamePad"",
                     ""action"": ""CamSwitch"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
@@ -229,7 +229,7 @@ public partial class @PlayerSplitScreen: IInputActionCollection2, IDisposable
                     ""path"": ""<Gamepad>/rightShoulder"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": """",
+                    ""groups"": "";GamePad"",
                     ""action"": ""ShiftUp"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
@@ -251,7 +251,7 @@ public partial class @PlayerSplitScreen: IInputActionCollection2, IDisposable
                     ""path"": ""<Gamepad>/leftShoulder"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": """",
+                    ""groups"": "";GamePad"",
                     ""action"": ""ShiftDown"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
@@ -273,7 +273,7 @@ public partial class @PlayerSplitScreen: IInputActionCollection2, IDisposable
                     ""path"": ""<Gamepad>/leftTrigger"",
                     ""interactions"": """",
                     ""processors"": ""AxisDeadzone"",
-                    ""groups"": """",
+                    ""groups"": "";GamePad"",
                     ""action"": ""Brake"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
@@ -295,7 +295,7 @@ public partial class @PlayerSplitScreen: IInputActionCollection2, IDisposable
                     ""path"": ""<Gamepad>/rightTrigger"",
                     ""interactions"": """",
                     ""processors"": ""AxisDeadzone"",
-                    ""groups"": """",
+                    ""groups"": "";GamePad"",
                     ""action"": ""Throttle"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
@@ -317,7 +317,7 @@ public partial class @PlayerSplitScreen: IInputActionCollection2, IDisposable
                     ""path"": ""<Gamepad>/rightStick"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": """",
+                    ""groups"": "";GamePad"",
                     ""action"": ""MoveCamera"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
@@ -345,7 +345,7 @@ public partial class @PlayerSplitScreen: IInputActionCollection2, IDisposable
                     ""path"": ""<Gamepad>/rightTrigger"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": """",
+                    ""groups"": "";GamePad"",
                     ""action"": ""RumbleAction"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false

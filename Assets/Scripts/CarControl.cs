@@ -197,6 +197,47 @@ public class CarControl : MonoBehaviour
                 wheel.WheelCollider.brakeTorque = brakeInput * brakeTorque * bias;
             }
         }
+        
+        // Rumble
+        
+        float curbRumble = 0f;
+        int curbWheels = 0;
+        
+        foreach (var wheel in wheels)
+        {
+            if (wheel.IsOnCurb(out float strength))
+            {
+                curbRumble += strength;
+                curbWheels++;
+            }
+        }
+        
+        if (curbWheels > 0)
+        {
+            float intensity = Mathf.Clamp01(curbRumble / curbWheels);
+
+            // low freq = chassis, high freq = vibration
+            RumbleManager.instance.RumblePulse(0.1f * intensity, 1.0f * intensity, Time.fixedDeltaTime * 1.1f
+            );
+        }
+        
+        float lineRumble = 0f;
+        int lineWheels = 0;
+        
+        foreach (var wheel in wheels)
+        {
+            if (wheel.IsOnLine(out float strength))
+            {
+                lineRumble += strength;
+                lineWheels++;
+            }
+        }
+
+        if (lineWheels > 0)
+        {
+            float intensity = Mathf.Clamp01(lineRumble / lineWheels);
+            RumbleManager.instance.RumblePulse(0.03f * intensity, 0.1f * intensity, Time.fixedDeltaTime * 1.1f);
+        }
     }
     
     // INPUT

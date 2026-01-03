@@ -1737,9 +1737,13 @@ MonoBehaviour:
       m_Calls: []
     m_ActionId: 8f100d10-1fd8-4e65-ab66-ac34820ecb19
     m_ActionName: Player/MoveCamera
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 2ccd3ad2-90e6-45e4-afef-dfe0ad75ff20
+    m_ActionName: 'Rumble/RumbleAction[/XInputControllerWindows/rightTrigger,/DualSenseGamepadHID/rightTrigger,/XInputControllerWindows1/rightTrigger,/Keyboard/1]'
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
-  m_DefaultActionMap: Player
+  m_DefaultActionMap: 3709d8d8-6407-4849-a1a7-e9944d06726a
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 5113613063169272839}
 --- !u!1 &4040310101831568977
