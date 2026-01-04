@@ -41,6 +41,7 @@ public class CarControl : MonoBehaviour
     [SerializeField] private Transform cameraPoint2;
     [SerializeField] private float maximumOrbitDistance = 10f;
     [SerializeField] private float minimumOrbitDistance = 2f;
+    [SerializeField] private float rumbleMinSpeedKph = 2f;
 
     [Header("UI")]
     public TMP_Text speedometer;
@@ -98,9 +99,13 @@ public class CarControl : MonoBehaviour
 
     void FixedUpdate()
     {
+        float rumbleLow = 0f;
+        float rumbleHigh = 0f;
+        int contributingWheels = 0;
+        
         float speedKph = rb.linearVelocity.magnitude * 3.6f;
         float speed = Mathf.InverseLerp(0f, maxSpeed, speedKph);
-
+        float speed01 = Mathf.InverseLerp(40f, 160f, speedKph);
         // Steering
 
         float steerInput = Mathf.Sign(hInput) * hInput * hInput;
@@ -196,48 +201,32 @@ public class CarControl : MonoBehaviour
                 float bias = wheel.motorized ? 0.8f : 1.2f;
                 wheel.WheelCollider.brakeTorque = brakeInput * brakeTorque * bias;
             }
-        }
-        
-        // Rumble
-        
-        float curbRumble = 0f;
-        int curbWheels = 0;
-        
-        foreach (var wheel in wheels)
-        {
-            if (wheel.IsOnCurb(out float strength))
+            if (wheel.TryGetSurface(out SurfaceProfile surface, out float strength))
             {
-                curbRumble += strength;
-                curbWheels++;
+                float low = surface.lowFrequency * strength;
+                float high = surface.highFrequency * strength;
+
+                if (surface.speedScaled)
+                    high *= speed01;
+
+                rumbleLow += low;
+                rumbleHigh += high;
+                contributingWheels++;
             }
         }
-        
-        if (curbWheels > 0)
+        if (speedKph > rumbleMinSpeedKph && contributingWheels > 0)
         {
-            float intensity = Mathf.Clamp01(curbRumble / curbWheels);
-
-            // low freq = chassis, high freq = vibration
-            RumbleManager.instance.RumblePulse(0.1f * intensity, 1.0f * intensity, Time.fixedDeltaTime * 1.1f
+            RumbleManager.instance.RumblePulse(
+                Mathf.Clamp01(rumbleLow / contributingWheels),
+                Mathf.Clamp01(rumbleHigh / contributingWheels),
+                Time.fixedDeltaTime * 1.1f
             );
         }
-        
-        float lineRumble = 0f;
-        int lineWheels = 0;
-        
-        foreach (var wheel in wheels)
+        else
         {
-            if (wheel.IsOnLine(out float strength))
-            {
-                lineRumble += strength;
-                lineWheels++;
-            }
+            RumbleManager.instance.RumblePulse(0f, 0f, 0f);
         }
 
-        if (lineWheels > 0)
-        {
-            float intensity = Mathf.Clamp01(lineRumble / lineWheels);
-            RumbleManager.instance.RumblePulse(0.03f * intensity, 0.1f * intensity, Time.fixedDeltaTime * 1.1f);
-        }
     }
     
     // INPUT

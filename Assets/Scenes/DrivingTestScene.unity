@@ -292,7 +292,7 @@ MeshCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 56896281}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: 28a2b47ea7e6fae46a7abc3071452417, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -2050,6 +2050,72 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 6830269819572012535, guid: 7e9cc13f3c794e04f9055fa50e15d686, type: 3}
+--- !u!1 &297587606
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 297587608}
+  - component: {fileID: 297587607}
+  m_Layer: 0
+  m_Name: SurfaceManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &297587607
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 297587606}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a8e5f47dd262ce34a9df076bfc56fc69, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SurfaceManager
+  surfaces:
+  - name: Paint
+    materials:
+    - {fileID: 13400000, guid: 60f4690cd178dcc4bb6bd8860a8c7345, type: 2}
+    lowFrequency: 0.03
+    highFrequency: 0.2
+    intensityMultiplier: 0.7
+    speedScaled: 1
+  - name: Grass
+    materials:
+    - {fileID: 13400000, guid: 28a2b47ea7e6fae46a7abc3071452417, type: 2}
+    lowFrequency: 0.15
+    highFrequency: 0.2
+    intensityMultiplier: 0.8
+    speedScaled: 0
+  - name: Curb
+    materials:
+    - {fileID: 13400000, guid: b3e94c0701d05b547bb480d1c7795600, type: 2}
+    lowFrequency: 0.12
+    highFrequency: 1
+    intensityMultiplier: 1.2
+    speedScaled: 0
+--- !u!4 &297587608
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 297587606}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 55.44613, y: -0.00002, z: -21.21704}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!64 &307857818
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -4734,7 +4800,7 @@ MeshCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 421900988}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: 28a2b47ea7e6fae46a7abc3071452417, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -4756,7 +4822,7 @@ MeshCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 421900989}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: 28a2b47ea7e6fae46a7abc3071452417, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -4778,7 +4844,7 @@ MeshCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 421900990}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: 28a2b47ea7e6fae46a7abc3071452417, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -4822,7 +4888,7 @@ MeshCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 421900990}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: 28a2b47ea7e6fae46a7abc3071452417, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -4930,7 +4996,7 @@ MeshCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 435297487}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: 28a2b47ea7e6fae46a7abc3071452417, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -10798,6 +10864,7 @@ MonoBehaviour:
   cameraPoint2: {fileID: 0}
   maximumOrbitDistance: 10
   minimumOrbitDistance: 2
+  rumbleMinSpeedKph: 2
   speedometer: {fileID: 1551275430}
   gearIndicator: {fileID: 0}
 --- !u!64 &1540907368
@@ -13725,3 +13792,4 @@ SceneRoots:
   - {fileID: 1098768127}
   - {fileID: 1972134221}
   - {fileID: 1767940048}
+  - {fileID: 297587608}

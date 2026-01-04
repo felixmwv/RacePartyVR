@@ -3,9 +3,10 @@ using UnityEngine;
 public class WheelControl : MonoBehaviour
 {
     public Transform wheelModel;
-    public bool IsOnCurb(out float curbStrength)
+    public bool TryGetSurface(out SurfaceProfile surface, out float strength)
     {
-        curbStrength = 0f;
+        surface = null;
+        strength = 0f;
 
         if (!WheelCollider.isGrounded)
             return false;
@@ -13,40 +14,16 @@ public class WheelControl : MonoBehaviour
         if (!WheelCollider.GetGroundHit(out WheelHit hit))
             return false;
 
-        if (hit.collider.sharedMaterial == null)
+        if (!SurfaceManager.Instance.TryGetSurface(hit.collider.sharedMaterial, out surface))
             return false;
 
-        if (hit.collider.sharedMaterial.name != "CurbMaterial")
-            return false;
-        
         float slip = Mathf.Abs(hit.sidewaysSlip);
-        float compression = 1f - (hit.force / WheelCollider.suspensionSpring.spring);
+        float load = hit.force / WheelCollider.suspensionSpring.spring;
 
-        curbStrength = Mathf.Clamp01(slip + compression);
+        strength = Mathf.Clamp01((slip + load) * surface.intensityMultiplier);
         return true;
     }
-    public bool IsOnLine(out float lineStrength)
-    {
-        lineStrength = 0f;
 
-        if (!WheelCollider.isGrounded)
-            return false;
-
-        if (!WheelCollider.GetGroundHit(out WheelHit hit))
-            return false;
-
-        if (hit.collider.sharedMaterial == null)
-            return false;
-
-        if (hit.collider.sharedMaterial.name != "RoadLineMaterial")
-            return false;
-        
-        float slip = Mathf.Abs(hit.sidewaysSlip);
-        float compression = 1f - (hit.force / WheelCollider.suspensionSpring.spring);
-
-        lineStrength = Mathf.Clamp01(slip + compression);
-        return true;
-    }
     [HideInInspector] public WheelCollider WheelCollider;
 
     // Create properties for the CarControl script
