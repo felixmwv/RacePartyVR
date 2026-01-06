@@ -63,7 +63,9 @@ public class CarControl : MonoBehaviour
 
     private bool switchCameraPressed;
     private bool usingPoint1 = true;
-    
+    private bool rumbling;
+    private bool handbrake;
+
     // UNITY LIFECYCLE
 
     void Awake()
@@ -106,6 +108,7 @@ public class CarControl : MonoBehaviour
         float speedKph = rb.linearVelocity.magnitude * 3.6f;
         float speed = Mathf.InverseLerp(0f, maxSpeed, speedKph);
         float speed01 = Mathf.InverseLerp(40f, 160f, speedKph);
+        float rumbleSpeed = Mathf.InverseLerp(5f, maxSpeed * 0.8f, speedKph);
         // Steering
 
         float steerInput = Mathf.Sign(hInput) * hInput * hInput;
@@ -189,13 +192,24 @@ public class CarControl : MonoBehaviour
 
             wheel.WheelCollider.motorTorque = 0f;
             wheel.WheelCollider.brakeTorque = 0f;
-
+            
+            if (wheel.motorized && handbrake)
+            {
+                wheel.SetHandbrake(true);
+                wheel.WheelCollider.motorTorque = 0f; 
+                wheel.WheelCollider.brakeTorque = brakeTorque * 2f;
+                continue;
+            }
+            else
+            {
+                wheel.SetHandbrake(false);
+            }
             if (applyingThrottle && wheel.motorized && !revLimiter)
             {
                 float dir = currentGear == -1 ? -1f : 1f;
                 wheel.WheelCollider.motorTorque = finalMotorTorque * throttle01 * dir;
             }
-
+            
             if (applyingBrake)
             {
                 float bias = wheel.motorized ? 0.8f : 1.2f;
@@ -216,17 +230,22 @@ public class CarControl : MonoBehaviour
         }
         if (speedKph > rumbleMinSpeedKph && contributingWheels > 0)
         {
+            rumbling = true;
+
+            float finalLow = (rumbleLow / contributingWheels) * rumbleSpeed;
+            float finalHigh = (rumbleHigh / contributingWheels) * rumbleSpeed;
+
             RumbleManager.instance.RumblePulse(
-                Mathf.Clamp01(rumbleLow / contributingWheels),
-                Mathf.Clamp01(rumbleHigh / contributingWheels),
+                Mathf.Clamp01(finalLow),
+                Mathf.Clamp01(finalHigh),
                 Time.fixedDeltaTime * 1.1f
             );
         }
-        else
+        else if (rumbling)
         {
+            rumbling = false;
             RumbleManager.instance.RumblePulse(0f, 0f, 0f);
         }
-
     }
     
     // INPUT
@@ -234,6 +253,11 @@ public class CarControl : MonoBehaviour
     public void OnThrottle(InputAction.CallbackContext ctx) => throttleInput = ctx.ReadValue<float>();
     public void OnBrake(InputAction.CallbackContext ctx) => brakeInput = ctx.ReadValue<float>();
     public void OnSteer(InputAction.CallbackContext ctx) => hInput = ctx.ReadValue<float>();
+    public void OnHandbrake(InputAction.CallbackContext ctx)
+    {
+        handbrake = ctx.ReadValue<bool>();
+    }
+
 
     public void OnShiftUp(InputAction.CallbackContext ctx)
     {

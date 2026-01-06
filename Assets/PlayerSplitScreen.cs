@@ -154,6 +154,15 @@ public partial class @PlayerSplitScreen: IInputActionCollection2, IDisposable
                     ""processors"": ""ScaleVector2(x=100,y=100)"",
                     ""interactions"": """",
                     ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""HandBrake"",
+                    ""type"": ""Button"",
+                    ""id"": ""bbc41f7a-040d-4afb-8674-36658870c3eb"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -321,6 +330,17 @@ public partial class @PlayerSplitScreen: IInputActionCollection2, IDisposable
                     ""action"": ""MoveCamera"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""9bb6bc73-1c67-49c6-b9b6-392f07951e36"",
+                    ""path"": ""<Gamepad>/buttonSouth"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";GamePad"",
+                    ""action"": ""HandBrake"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         },
@@ -398,6 +418,7 @@ public partial class @PlayerSplitScreen: IInputActionCollection2, IDisposable
         m_Player_Brake = m_Player.FindAction("Brake", throwIfNotFound: true);
         m_Player_Throttle = m_Player.FindAction("Throttle", throwIfNotFound: true);
         m_Player_MoveCamera = m_Player.FindAction("MoveCamera", throwIfNotFound: true);
+        m_Player_HandBrake = m_Player.FindAction("HandBrake", throwIfNotFound: true);
         // Rumble
         m_Rumble = asset.FindActionMap("Rumble", throwIfNotFound: true);
         m_Rumble_RumbleAction = m_Rumble.FindAction("RumbleAction", throwIfNotFound: true);
@@ -489,6 +510,7 @@ public partial class @PlayerSplitScreen: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_Brake;
     private readonly InputAction m_Player_Throttle;
     private readonly InputAction m_Player_MoveCamera;
+    private readonly InputAction m_Player_HandBrake;
     /// <summary>
     /// Provides access to input actions defined in input action map "Player".
     /// </summary>
@@ -528,6 +550,10 @@ public partial class @PlayerSplitScreen: IInputActionCollection2, IDisposable
         /// Provides access to the underlying input action "Player/MoveCamera".
         /// </summary>
         public InputAction @MoveCamera => m_Wrapper.m_Player_MoveCamera;
+        /// <summary>
+        /// Provides access to the underlying input action "Player/HandBrake".
+        /// </summary>
+        public InputAction @HandBrake => m_Wrapper.m_Player_HandBrake;
         /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
@@ -575,6 +601,9 @@ public partial class @PlayerSplitScreen: IInputActionCollection2, IDisposable
             @MoveCamera.started += instance.OnMoveCamera;
             @MoveCamera.performed += instance.OnMoveCamera;
             @MoveCamera.canceled += instance.OnMoveCamera;
+            @HandBrake.started += instance.OnHandBrake;
+            @HandBrake.performed += instance.OnHandBrake;
+            @HandBrake.canceled += instance.OnHandBrake;
         }
 
         /// <summary>
@@ -607,6 +636,9 @@ public partial class @PlayerSplitScreen: IInputActionCollection2, IDisposable
             @MoveCamera.started -= instance.OnMoveCamera;
             @MoveCamera.performed -= instance.OnMoveCamera;
             @MoveCamera.canceled -= instance.OnMoveCamera;
+            @HandBrake.started -= instance.OnHandBrake;
+            @HandBrake.performed -= instance.OnHandBrake;
+            @HandBrake.canceled -= instance.OnHandBrake;
         }
 
         /// <summary>
@@ -818,6 +850,13 @@ public partial class @PlayerSplitScreen: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnMoveCamera(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "HandBrake" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnHandBrake(InputAction.CallbackContext context);
     }
     /// <summary>
     /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "Rumble" which allows adding and removing callbacks.

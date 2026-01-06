@@ -3,6 +3,25 @@ using UnityEngine;
 public class WheelControl : MonoBehaviour
 {
     public Transform wheelModel;
+    
+    [Header("Drift")]
+    public float normalSidewaysGrip = 1.0f;
+    public float handbrakeSidewaysGrip = 0.3f;
+
+    private bool handbrakeActive;
+
+    public void SetHandbrake(bool active)
+    {
+        if (handbrakeActive == active)
+            return;
+
+        handbrakeActive = active;
+
+        WheelFrictionCurve friction = WheelCollider.sidewaysFriction;
+        friction.stiffness = active ? handbrakeSidewaysGrip : normalSidewaysGrip;
+        WheelCollider.sidewaysFriction = friction;
+    }
+
     public bool TryGetSurface(out SurfaceProfile surface, out float strength)
     {
         surface = null;

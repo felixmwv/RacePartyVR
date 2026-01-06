@@ -143,7 +143,6 @@ Transform:
   m_Children:
   - {fileID: 1327180086632463244}
   - {fileID: 7971517832684979958}
-  - {fileID: 1846485758894960538}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: -90, z: 0}
 --- !u!1 &414685053238070690
@@ -231,6 +230,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::WheelControl
   wheelModel: {fileID: 1513210916900241601}
+  normalSidewaysGrip: 1
+  handbrakeSidewaysGrip: 0.3
   WheelCollider: {fileID: 0}
   steerable: 1
   motorized: 0
@@ -461,7 +462,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1846485758894960538}
-  - component: {fileID: 8657538953293130945}
   m_Layer: 0
   m_Name: CinemachineBrain
   m_TagString: Untagged
@@ -477,45 +477,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2065799232810422180}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.23454925, y: 0.1478712, z: -0.03612397, w: 0.9601124}
-  m_LocalPosition: {x: -1.3140857, y: 2.269234, z: -4.164915}
-  m_LocalScale: {x: 0.99999976, y: 1, z: 0.99999976}
+  m_LocalRotation: {x: -0.155086, y: -0.73286986, z: 0.2791496, w: -0.60077083}
+  m_LocalPosition: {x: -3.948537, y: 2.9614568, z: 4.029373}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 6687034635181855924}
+  m_Father: {fileID: 4302716149530746049}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &8657538953293130945
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2065799232810422180}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 72ece51f2901e7445ab60da3685d6b5f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Unity.Cinemachine::Unity.Cinemachine.CinemachineBrain
-  ShowDebugText: 0
-  ShowCameraFrustum: 1
-  IgnoreTimeScale: 0
-  WorldUpOverride: {fileID: 0}
-  ChannelMask: 2
-  UpdateMethod: 0
-  BlendUpdateMethod: 1
-  LensModeOverride:
-    Enabled: 0
-    DefaultMode: 2
-  DefaultBlend:
-    Style: 1
-    Time: 2
-    CustomCurve:
-      serializedVersion: 2
-      m_Curve: []
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-  CustomBlends: {fileID: 0}
 --- !u!1 &2751239815805040218
 GameObject:
   m_ObjectHideFlags: 0
@@ -769,6 +737,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::WheelControl
   wheelModel: {fileID: 541656261883243143}
+  normalSidewaysGrip: 1
+  handbrakeSidewaysGrip: 0.3
   WheelCollider: {fileID: 0}
   steerable: 1
   motorized: 0
@@ -1077,6 +1047,7 @@ Transform:
   - {fileID: 2720180631140679391}
   - {fileID: 987238742919333960}
   - {fileID: 2388485758375661264}
+  - {fileID: 4302716149530746049}
   - {fileID: 372257036181386061}
   m_Father: {fileID: 1327180086632463244}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1610,6 +1581,7 @@ MonoBehaviour:
   cameraPoint2: {fileID: 987238742919333960}
   maximumOrbitDistance: 10
   minimumOrbitDistance: 2
+  rumbleMinSpeedKph: 2
   speedometer: {fileID: 7701929083901118777}
   gearIndicator: {fileID: 4750852584347108090}
 --- !u!114 &6900313862355687545
@@ -1741,9 +1713,25 @@ MonoBehaviour:
       m_Calls: []
     m_ActionId: 2ccd3ad2-90e6-45e4-afef-dfe0ad75ff20
     m_ActionName: 'Rumble/RumbleAction[/XInputControllerWindows/rightTrigger,/DualSenseGamepadHID/rightTrigger,/XInputControllerWindows1/rightTrigger,/Keyboard/1]'
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 4064430060945550377}
+        m_TargetAssemblyTypeName: CarControl, Assembly-CSharp
+        m_MethodName: OnHandbrake
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: bbc41f7a-040d-4afb-8674-36658870c3eb
+    m_ActionName: 'Player/HandBrake[/XInputControllerWindows/buttonSouth,/DualSenseGamepadHID/buttonSouth]'
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
-  m_DefaultActionMap: 3709d8d8-6407-4849-a1a7-e9944d06726a
+  m_DefaultActionMap: Player
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 5113613063169272839}
 --- !u!1 &4040310101831568977
@@ -1831,6 +1819,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::WheelControl
   wheelModel: {fileID: 5922433203602951214}
+  normalSidewaysGrip: 1
+  handbrakeSidewaysGrip: 0.3
   WheelCollider: {fileID: 0}
   steerable: 0
   motorized: 1
@@ -2613,6 +2603,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::WheelControl
   wheelModel: {fileID: 5339028789075524885}
+  normalSidewaysGrip: 1
+  handbrakeSidewaysGrip: 0.3
   WheelCollider: {fileID: 0}
   steerable: 0
   motorized: 1
@@ -2628,6 +2620,7 @@ GameObject:
   - component: {fileID: 5113613063169272839}
   - component: {fileID: 7832686829482043823}
   - component: {fileID: 8340617053697866017}
+  - component: {fileID: 4059399823163897079}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -2643,12 +2636,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6216036360504816422}
   serializedVersion: 2
-  m_LocalRotation: {x: -0.17300858, y: 0.000000084293696, z: -0.000000015805067, w: 0.9849203}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalRotation: {x: 0.24693333, y: 0.5537078, z: -0.17631902, w: 0.7754632}
+  m_LocalPosition: {x: -3.8376026, y: 2.875577, z: -1.3171735}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 372257036181386061}
+  m_Children:
+  - {fileID: 1846485758894960538}
+  m_Father: {fileID: 7422724952781741225}
   m_LocalEulerAnglesHint: {x: 16.114, y: 71.664, z: 0}
 --- !u!20 &5113613063169272839
 Camera:
@@ -2659,7 +2653,7 @@ Camera:
   m_GameObject: {fileID: 6216036360504816422}
   m_Enabled: 1
   serializedVersion: 2
-  m_ClearFlags: 1
+  m_ClearFlags: 4
   m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
@@ -2681,11 +2675,11 @@ Camera:
     y: 0
     width: 1
     height: 1
-  near clip plane: 0.01
-  far clip plane: 1000
-  field of view: 60
+  near clip plane: 0.1
+  far clip plane: 5000
+  field of view: 60.000004
   orthographic: 0
-  orthographic size: 5
+  orthographic size: 10
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -2753,6 +2747,38 @@ MonoBehaviour:
     m_VarianceClampScale: 0.9
     m_ContrastAdaptiveSharpening: 0
   m_Version: 2
+--- !u!114 &4059399823163897079
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6216036360504816422}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 72ece51f2901e7445ab60da3685d6b5f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.Cinemachine::Unity.Cinemachine.CinemachineBrain
+  ShowDebugText: 0
+  ShowCameraFrustum: 1
+  IgnoreTimeScale: 0
+  WorldUpOverride: {fileID: 0}
+  ChannelMask: 0
+  UpdateMethod: 2
+  BlendUpdateMethod: 1
+  LensModeOverride:
+    Enabled: 0
+    DefaultMode: 2
+  DefaultBlend:
+    Style: 1
+    Time: 2
+    CustomCurve:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+  CustomBlends: {fileID: 0}
 --- !u!1 &6369453058807936189
 GameObject:
   m_ObjectHideFlags: 0
@@ -3166,12 +3192,11 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7878215594990306776}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.23454924, y: 0.1478713, z: -0.036123972, w: 0.9601124}
-  m_LocalPosition: {x: -1.3140857, y: 2.269234, z: -4.164915}
+  m_LocalRotation: {x: 0.24693325, y: 0.5537079, z: -0.17631899, w: 0.7754633}
+  m_LocalPosition: {x: -3.8376026, y: 2.875577, z: -1.3171735}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 4302716149530746049}
+  m_Children: []
   m_Father: {fileID: 7422724952781741225}
   m_LocalEulerAnglesHint: {x: -4.39, y: 36.256, z: 0}
 --- !u!114 &1401047739468557069
@@ -3189,7 +3214,7 @@ MonoBehaviour:
   Priority:
     Enabled: 0
     m_Value: 0
-  OutputChannel: 2
+  OutputChannel: 0
   StandbyUpdate: 2
   m_StreamingVersion: 20241001
   m_LegacyPriority: 0
@@ -3232,7 +3257,7 @@ MonoBehaviour:
   TargetOffset: {x: 0, y: 0, z: 0}
   TrackerSettings:
     BindingMode: 5
-    PositionDamping: {x: 0.5, y: 0.5, z: 0.5}
+    PositionDamping: {x: 0.4, y: 0.4, z: 0.4}
     AngularDampingMode: 0
     RotationDamping: {x: 1, y: 1, z: 1}
     QuaternionDamping: 1
@@ -3261,7 +3286,7 @@ MonoBehaviour:
       Time: 2
     Restrictions: 0
   VerticalAxis:
-    Value: 21.115486
+    Value: 29.641508
     Center: 4.5
     Range: {x: -10, y: 45}
     Wrap: 0
