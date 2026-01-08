@@ -13,4 +13,5 @@ public class SurfaceProfile
 
     [Header("Behaviour")]
     public bool speedScaled = true;
+    public float sidewaysGrip = 1f;
 }

@@ -5,12 +5,13 @@ using Unity.Cinemachine;
 
 public class CarControl : MonoBehaviour
 {
+    // =======================
     // PUBLIC VARIABLES
+    // =======================
 
     [Header("Car Properties")]
-    public float motorTorque = 5000f;
     public float brakeTorque = 5000f;
-    public float maxSpeed = 60f;
+    public float maxSpeed = 200f;
     public float minSteeringAngle = 0f;
     public float steeringRange = 30f;
     public float steeringRangeAtMaxSpeed = 12f;
@@ -26,6 +27,7 @@ public class CarControl : MonoBehaviour
     public float[] gearMaxSpeeds = { 20f, 35f, 55f, 75f, 95f };
     public float idleRPM = 900f;
     public float redlineRPM = 7000f;
+    public float speedResponse = 10f;
 
     public AnimationCurve torqueCurve = new AnimationCurve(
         new Keyframe(0f, 0.4f),
@@ -46,8 +48,11 @@ public class CarControl : MonoBehaviour
     [Header("UI")]
     public TMP_Text speedometer;
     public TMP_Text gearIndicator;
-    
+    public TMP_Text rpmMeter;
+
+    // =======================
     // PRIVATE VARIABLES
+    // =======================
 
     private Rigidbody rb;
     private WheelControl[] wheels;
@@ -55,7 +60,7 @@ public class CarControl : MonoBehaviour
     private float smoothSteerInput;
     private float throttleInput;
     private float brakeInput;
-    private float hInput;
+    private float steerInputRaw;
 
     private float engineRPM;
     private int currentGear = 0;
@@ -66,15 +71,17 @@ public class CarControl : MonoBehaviour
     private bool rumbling;
     private bool handbrake;
 
+    // =======================
     // UNITY LIFECYCLE
+    // =======================
 
-    void Awake()
+    private void Awake()
     {
         rb = GetComponent<Rigidbody>();
         wheels = GetComponentsInChildren<WheelControl>();
     }
 
-    void Start()
+    private void Start()
     {
         Vector3 com = rb.centerOfMass;
         com.y += centreOfGravityOffset;
@@ -83,7 +90,7 @@ public class CarControl : MonoBehaviour
         engineRPM = idleRPM;
     }
 
-    void Update()
+    private void Update()
     {
         if (switchCameraPressed)
         {
@@ -91,50 +98,97 @@ public class CarControl : MonoBehaviour
             switchCameraPressed = false;
         }
 
-        float kph = rb.linearVelocity.magnitude * 3.6f;
-        speedometer.text = kph.ToString("0");
+        float speedKph = rb.linearVelocity.magnitude * 3.6f;
+
+        speedometer.text = speedKph.ToString("0");
+        rpmMeter.text = engineRPM.ToString("0");
 
         if (currentGear == -1) gearIndicator.text = "R";
         else if (currentGear == 0) gearIndicator.text = "N";
         else gearIndicator.text = currentGear.ToString();
     }
 
-    void FixedUpdate()
+    private void FixedUpdate()
     {
-        float rumbleLow = 0f;
-        float rumbleHigh = 0f;
-        int contributingWheels = 0;
-        
+        // =======================
+        // SPEED VALUES
+        // =======================
+
         float speedKph = rb.linearVelocity.magnitude * 3.6f;
-        float speed = Mathf.InverseLerp(0f, maxSpeed, speedKph);
-        float speed01 = Mathf.InverseLerp(40f, 160f, speedKph);
-        float rumbleSpeed = Mathf.InverseLerp(5f, maxSpeed * 0.8f, speedKph);
-        // Steering
+        float speed01 = Mathf.InverseLerp(0f, maxSpeed, speedKph);
+        float steerSpeed01 = Mathf.InverseLerp(80f, 200f, speedKph);
+        float rumbleSpeed01 = Mathf.InverseLerp(5f, maxSpeed * 0.8f, speedKph);
 
-        float steerInput = Mathf.Sign(hInput) * hInput * hInput;
+        // =======================
+        // INPUT PROCESSING
+        // =======================
 
+        float throttle01 = Mathf.Clamp01(throttleInput);
+        float brake01 = Mathf.Clamp01(brakeInput);
+        bool applyingThrottle = throttle01 > 0.01f;
+        bool applyingBrake = brake01 > 0.01f;
+
+        float steerInput = Mathf.Sign(steerInputRaw) * steerInputRaw * steerInputRaw;
+
+        float targetSteerRange =
+            Mathf.Lerp(steeringRange, steeringRangeAtMaxSpeed, speed01);
+
+        float currentSteerRange =
+            Mathf.Clamp(targetSteerRange, minSteeringAngle, steeringRange);
+        float steer = smoothSteerInput * currentSteerRange;
+
+        float inner = steer * 1.15f;
+        float outer = steer * 0.85f;
+
+        foreach (var wheel in wheels)
+        {
+            if (!wheel.steerable)
+                continue;
+
+            if (steer > 0f) // rechtsom
+            {
+                wheel.WheelCollider.steerAngle =
+                    wheel.side == WheelControl.WheelSide.Left ? inner : outer;
+            }
+            else // linksom
+            {
+                wheel.WheelCollider.steerAngle =
+                    wheel.side == WheelControl.WheelSide.Left ? outer : inner;
+            }
+        }
+        
         smoothSteerInput = Mathf.MoveTowards(
             smoothSteerInput,
             steerInput,
             maxSteerSpeed * Time.fixedDeltaTime
         );
 
-        float targetSteerRange = Mathf.Lerp(steeringRange, steeringRangeAtMaxSpeed, speed);
-        float currentSteerRange = Mathf.Clamp(targetSteerRange, minSteeringAngle, steeringRange);
+        if (Mathf.Abs(steerInputRaw) < 0.01f)
+        {
+            float recenterStrength = Mathf.Lerp(2f, 8f, speed01);
+            smoothSteerInput = Mathf.MoveTowards(
+                smoothSteerInput,
+                0f,
+                recenterStrength * Time.fixedDeltaTime
+            );
+        }
 
-        // Engine RPM
+        // =======================
+        // ENGINE RPM FROM WHEELS
+        // =======================
 
         float wheelRPM = 0f;
-        int driven = 0;
+        int drivenWheels = 0;
 
         foreach (var w in wheels)
         {
             if (!w.motorized) continue;
             wheelRPM += w.WheelCollider.rpm;
-            driven++;
+            drivenWheels++;
         }
 
-        if (driven > 0) wheelRPM /= driven;
+        if (drivenWheels > 0)
+            wheelRPM /= drivenWheels;
 
         if (currentGear > 0)
             engineRPM = Mathf.Abs(wheelRPM) * gearRatios[currentGear - 1] * finalDrive;
@@ -144,96 +198,155 @@ public class CarControl : MonoBehaviour
         engineRPM = Mathf.Clamp(engineRPM, idleRPM, redlineRPM);
 
         float rpm01 = Mathf.InverseLerp(idleRPM, redlineRPM, engineRPM);
-        float torqueFromRPM = torqueCurve.Evaluate(rpm01);
+        bool revLimiter = engineRPM >= redlineRPM - 100f;
 
-        // Torque Output
-        
-        float gearLimiter = 1f;
+        // =======================
+        // GEAR SPEED TARGET
+        // =======================
 
-        if (currentGear > 0 && currentGear - 1 < gearMaxSpeeds.Length)
+        float gearMinSpeed;
+        float gearMaxSpeed;
+
+        if (currentGear <= 0)
         {
-            float limit01 = Mathf.InverseLerp(
-                gearMaxSpeeds[currentGear - 1] - 5f,
-                gearMaxSpeeds[currentGear - 1],
-                speedKph
-            );
-
-            gearLimiter = 1f - Mathf.Clamp01(limit01);
+            gearMinSpeed = 0f;
+            gearMaxSpeed = maxSpeed;
+        }
+        else
+        {
+            gearMaxSpeed = gearMaxSpeeds[currentGear - 1];
+            gearMinSpeed = currentGear > 1 ? gearMaxSpeeds[currentGear - 2] : 0f;
         }
 
+        float targetSpeedKph =
+            Mathf.Lerp(gearMinSpeed, gearMaxSpeed, throttle01);
+
+        float speedError = targetSpeedKph - speedKph;
+        float speedError01 = Mathf.Clamp01(speedError / speedResponse);
+
+        // =======================
+        // TORQUE CALC
+        // =======================
+
+        float torqueFromRPM = torqueCurve.Evaluate(rpm01);
         float finalMotorTorque = 0f;
 
-        if (currentGear > 0)
-            finalMotorTorque = engineTorque * torqueFromRPM *
-                                 gearRatios[currentGear - 1] *
-                                 finalDrive * gearLimiter * 10f;
-        else if (currentGear == -1)
-            finalMotorTorque = engineTorque * torqueFromRPM *
-                                 finalDrive * gearLimiter * 6f;
+        if (currentGear > 0 && speedError > 0f && !revLimiter)
+        {
+            finalMotorTorque =
+                engineTorque *
+                torqueFromRPM *
+                gearRatios[currentGear - 1] *
+                finalDrive *
+                speedError01 *
+                10f;
+        }
+        else if (currentGear == -1 && speedError > 0f)
+        {
+            finalMotorTorque =
+                engineTorque *
+                torqueFromRPM *
+                finalDrive *
+                speedError01 *
+                6f;
+        }
 
-        // Vehicle Dynamics
+        float torque01 = Mathf.Clamp01(finalMotorTorque / 8000f);
 
+        // =======================
+        // YAW DAMPING
+        // =======================
+
+        float yawDamping = Mathf.Lerp(0.05f, 0.25f, steerSpeed01);
         Vector3 localAV = transform.InverseTransformDirection(rb.angularVelocity);
-        float yawDamping = Mathf.Lerp(0.08f, 0.18f, speed);
         localAV.y *= (1f - yawDamping);
         rb.angularVelocity = transform.TransformDirection(localAV);
 
-        // Wheels
+        // =======================
+        // WHEELS + RUMBLE
+        // =======================
 
-        bool applyingThrottle = throttleInput > 0.01f;
-        bool applyingBrake = brakeInput > 0.01f;
-        bool revLimiter = engineRPM >= redlineRPM - 100f;
-        float throttle01 = Mathf.Clamp01(throttleInput);
+        float rumbleLow = 0f;
+        float rumbleHigh = 0f;
+        int contributingWheels = 0;
 
         foreach (var wheel in wheels)
         {
             if (wheel.steerable)
-                wheel.WheelCollider.steerAngle = smoothSteerInput * currentSteerRange;
+                wheel.WheelCollider.steerAngle =
+                    smoothSteerInput * currentSteerRange;
 
             wheel.WheelCollider.motorTorque = 0f;
             wheel.WheelCollider.brakeTorque = 0f;
-            
+
             if (wheel.motorized && handbrake)
             {
                 wheel.SetHandbrake(true);
-                wheel.WheelCollider.motorTorque = 0f; 
                 wheel.WheelCollider.brakeTorque = brakeTorque * 2f;
                 continue;
             }
-            else
-            {
-                wheel.SetHandbrake(false);
-            }
+
+            wheel.SetHandbrake(false);
+
             if (applyingThrottle && wheel.motorized && !revLimiter)
             {
                 float dir = currentGear == -1 ? -1f : 1f;
-                wheel.WheelCollider.motorTorque = finalMotorTorque * throttle01 * dir;
+                wheel.WheelCollider.motorTorque =
+                    finalMotorTorque * throttle01 * dir;
             }
+            bool isFront = wheel.transform.localPosition.z > 0f;
+
+            float steer01 = Mathf.Abs(smoothSteerInput);
+
+            float brakeStrength = brake01;
+            float bias = isFront ? 1.2f : 0.6f;
+            if (isFront)
+            {
+                // minder remkracht op voorwielen tijdens sturen
+                brakeStrength *= Mathf.Lerp(1f, 0.4f, steer01);
+            }
+
             
+
             if (applyingBrake)
             {
-                float bias = wheel.motorized ? 0.8f : 1.2f;
-                wheel.WheelCollider.brakeTorque = brakeInput * brakeTorque * bias;
+                wheel.WheelCollider.brakeTorque = brake01 * brakeTorque * bias;
+                wheel.SetBrakeGrip(true);
             }
+            else
+            {
+                wheel.SetBrakeGrip(false);
+            }
+
             if (wheel.TryGetSurface(out SurfaceProfile surface, out float strength))
             {
                 float low = surface.lowFrequency * strength;
                 float high = surface.highFrequency * strength;
 
                 if (surface.speedScaled)
-                    high *= speed01;
+                    high *= steerSpeed01;
 
                 rumbleLow += low;
                 rumbleHigh += high;
                 contributingWheels++;
+
+                wheel.UpdateDynamicGrip(rpm01, torque01, surface.sidewaysGrip);
+            }
+            else
+            {
+                wheel.UpdateDynamicGrip(rpm01, torque01, 1f);
             }
         }
+
         if (speedKph > rumbleMinSpeedKph && contributingWheels > 0)
         {
             rumbling = true;
 
-            float finalLow = (rumbleLow / contributingWheels) * rumbleSpeed;
-            float finalHigh = (rumbleHigh / contributingWheels) * rumbleSpeed;
+            float finalLow =
+                (rumbleLow / contributingWheels) * rumbleSpeed01;
+
+            float finalHigh =
+                (rumbleHigh / contributingWheels) * rumbleSpeed01;
 
             RumbleManager.instance.RumblePulse(
                 Mathf.Clamp01(finalLow),
@@ -247,17 +360,22 @@ public class CarControl : MonoBehaviour
             RumbleManager.instance.RumblePulse(0f, 0f, 0f);
         }
     }
-    
+
+    // =======================
     // INPUT
+    // =======================
 
-    public void OnThrottle(InputAction.CallbackContext ctx) => throttleInput = ctx.ReadValue<float>();
-    public void OnBrake(InputAction.CallbackContext ctx) => brakeInput = ctx.ReadValue<float>();
-    public void OnSteer(InputAction.CallbackContext ctx) => hInput = ctx.ReadValue<float>();
+    public void OnThrottle(InputAction.CallbackContext ctx)
+        => throttleInput = ctx.ReadValue<float>();
+
+    public void OnBrake(InputAction.CallbackContext ctx)
+        => brakeInput = ctx.ReadValue<float>();
+
+    public void OnSteer(InputAction.CallbackContext ctx)
+        => steerInputRaw = ctx.ReadValue<float>();
+
     public void OnHandbrake(InputAction.CallbackContext ctx)
-    {
-        handbrake = ctx.ReadValue<bool>();
-    }
-
+        => handbrake = ctx.ReadValueAsButton();
 
     public void OnShiftUp(InputAction.CallbackContext ctx)
     {
@@ -269,20 +387,23 @@ public class CarControl : MonoBehaviour
     {
         if (!ctx.performed) return;
 
-        float kph = rb.linearVelocity.magnitude * 3.6f;
-        if (currentGear == 0 && kph > 5f) return;
+        float speedKph = rb.linearVelocity.magnitude * 3.6f;
+        if (currentGear == 0 && speedKph > 5f) return;
 
         currentGear = Mathf.Max(currentGear - 1, -1);
     }
 
     public void OnSwitchCamera(InputAction.CallbackContext ctx)
     {
-        if (ctx.performed) switchCameraPressed = true;
+        if (ctx.performed)
+            switchCameraPressed = true;
     }
-    
-    // CAMERA
 
-    void SwitchCamera()
+    // =======================
+    // CAMERA
+    // =======================
+
+    private void SwitchCamera()
     {
         usingPoint1 = !usingPoint1;
         playerCamera.transform.SetParent(usingPoint1 ? cameraPoint1 : cameraPoint2);
@@ -290,3 +411,4 @@ public class CarControl : MonoBehaviour
         playerCamera.transform.localRotation = Quaternion.identity;
     }
 }
+
