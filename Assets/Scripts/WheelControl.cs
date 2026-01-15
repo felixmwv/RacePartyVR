@@ -1,9 +1,12 @@
+using System;
 using UnityEngine;
 
 public class WheelControl : MonoBehaviour
 {
     public Transform wheelModel;
-
+    [Header("Skid FX")]
+    [SerializeField] private ParticleSystem skidSmoke;
+    [SerializeField] private float skidThreshold = 0.35f;
     [Header("Dynamic Grip")]
     public float minSidewaysGrip = 0.4f;
     public float maxSidewaysGrip = 1f;
@@ -35,6 +38,8 @@ public class WheelControl : MonoBehaviour
     private void Start()
     {
         WheelCollider = GetComponent<WheelCollider>();
+        if (skidSmoke != null)
+            skidSmoke.Stop();
     }
 
     public void UpdateDynamicGrip(
@@ -119,13 +124,44 @@ public class WheelControl : MonoBehaviour
 
         return true;
     }
-
+    private void FixedUpdate()
+    {
+        SkidCheck();
+    }
     private void Update()
     {
         WheelCollider.GetWorldPose(out position, out rotation);
         wheelModel.transform.position = position;
         wheelModel.transform.rotation = rotation;
     }
+    private void SkidCheck()
+    {
+        if (!WheelCollider.isGrounded)
+            return;
+
+        if (!WheelCollider.GetGroundHit(out WheelHit hit))
+            return;
+
+        float slip = Mathf.Max(
+            Mathf.Abs(hit.forwardSlip),
+            Mathf.Abs(hit.sidewaysSlip)
+        );
+
+        if (slip >= skidThreshold)
+        {
+            if (!skidSmoke.isPlaying)
+                skidSmoke.Play();
+
+            skidSmoke.transform.position =
+                hit.point + hit.normal * 0.02f;
+        }
+        else
+        {
+            if (skidSmoke.isPlaying)
+                skidSmoke.Stop();
+        }
+    }
+
 }
 
 

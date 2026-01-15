@@ -2,12 +2,11 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using Unity.Cinemachine;
+using Unity.Mathematics.Geometry;
 
 public class CarControl : MonoBehaviour
 {
-    // =======================
     // PUBLIC VARIABLES
-    // =======================
 
     [Header("Car Properties")]
     public float brakeTorque = 5000f;
@@ -44,15 +43,14 @@ public class CarControl : MonoBehaviour
     [SerializeField] private float maximumOrbitDistance = 10f;
     [SerializeField] private float minimumOrbitDistance = 2f;
     [SerializeField] private float rumbleMinSpeedKph = 2f;
-
+    [SerializeField] private float skidThreshold = 0.4f;
+    
     [Header("UI")]
     public TMP_Text speedometer;
     public TMP_Text gearIndicator;
     public TMP_Text rpmMeter;
-
-    // =======================
+    
     // PRIVATE VARIABLES
-    // =======================
 
     private Rigidbody rb;
     private WheelControl[] wheels;
@@ -70,10 +68,8 @@ public class CarControl : MonoBehaviour
     private bool usingPoint1 = true;
     private bool rumbling;
     private bool handbrake;
-
-    // =======================
+    
     // UNITY LIFECYCLE
-    // =======================
 
     private void Awake()
     {
@@ -107,21 +103,17 @@ public class CarControl : MonoBehaviour
         else if (currentGear == 0) gearIndicator.text = "N";
         else gearIndicator.text = currentGear.ToString();
     }
-
+    
     private void FixedUpdate()
     {
-        // =======================
         // SPEED VALUES
-        // =======================
-
+        
         float speedKph = rb.linearVelocity.magnitude * 3.6f;
         float speed01 = Mathf.InverseLerp(0f, maxSpeed, speedKph);
         float steerSpeed01 = Mathf.InverseLerp(80f, 200f, speedKph);
         float rumbleSpeed01 = Mathf.InverseLerp(5f, maxSpeed * 0.8f, speedKph);
-
-        // =======================
+        
         // INPUT PROCESSING
-        // =======================
 
         float throttle01 = Mathf.Clamp01(throttleInput);
         float brake01 = Mathf.Clamp01(brakeInput);
@@ -172,10 +164,7 @@ public class CarControl : MonoBehaviour
                 recenterStrength * Time.fixedDeltaTime
             );
         }
-
-        // =======================
         // ENGINE RPM FROM WHEELS
-        // =======================
 
         float wheelRPM = 0f;
         int drivenWheels = 0;
@@ -199,10 +188,8 @@ public class CarControl : MonoBehaviour
 
         float rpm01 = Mathf.InverseLerp(idleRPM, redlineRPM, engineRPM);
         bool revLimiter = engineRPM >= redlineRPM - 100f;
-
-        // =======================
+        
         // GEAR SPEED TARGET
-        // =======================
 
         float gearMinSpeed;
         float gearMaxSpeed;
@@ -223,10 +210,8 @@ public class CarControl : MonoBehaviour
 
         float speedError = targetSpeedKph - speedKph;
         float speedError01 = Mathf.Clamp01(speedError / speedResponse);
-
-        // =======================
+        
         // TORQUE CALC
-        // =======================
 
         float torqueFromRPM = torqueCurve.Evaluate(rpm01);
         float finalMotorTorque = 0f;
@@ -252,19 +237,15 @@ public class CarControl : MonoBehaviour
         }
 
         float torque01 = Mathf.Clamp01(finalMotorTorque / 8000f);
-
-        // =======================
+        
         // YAW DAMPING
-        // =======================
 
         float yawDamping = Mathf.Lerp(0.05f, 0.25f, steerSpeed01);
         Vector3 localAV = transform.InverseTransformDirection(rb.angularVelocity);
         localAV.y *= (1f - yawDamping);
         rb.angularVelocity = transform.TransformDirection(localAV);
-
-        // =======================
+        
         // WHEELS + RUMBLE
-        // =======================
 
         float rumbleLow = 0f;
         float rumbleHigh = 0f;
@@ -303,20 +284,18 @@ public class CarControl : MonoBehaviour
             if (isFront)
             {
                 // minder remkracht op voorwielen tijdens sturen
-                brakeStrength *= Mathf.Lerp(1f, 0.4f, steer01);
+                brake01 *= Mathf.Lerp(1f, 0.4f, steer01);
             }
-
             
-
-            if (applyingBrake)
+            if (wheel.motorized && applyingBrake)
             {
-                wheel.WheelCollider.brakeTorque = brake01 * brakeTorque * bias;
                 wheel.SetBrakeGrip(true);
+                wheel.WheelCollider.brakeTorque = brake01 * brakeTorque * bias;
+                continue;
             }
-            else
-            {
-                wheel.SetBrakeGrip(false);
-            }
+            
+            wheel.SetBrakeGrip(false);
+            
 
             if (wheel.TryGetSurface(out SurfaceProfile surface, out float strength))
             {
@@ -360,13 +339,13 @@ public class CarControl : MonoBehaviour
             RumbleManager.instance.RumblePulse(0f, 0f, 0f);
         }
     }
-
-    // =======================
+    
     // INPUT
-    // =======================
-
+    
     public void OnThrottle(InputAction.CallbackContext ctx)
-        => throttleInput = ctx.ReadValue<float>();
+    {
+        throttleInput = ctx.ReadValue<float>();
+    }
 
     public void OnBrake(InputAction.CallbackContext ctx)
         => brakeInput = ctx.ReadValue<float>();
@@ -381,6 +360,7 @@ public class CarControl : MonoBehaviour
     {
         if (ctx.performed)
             currentGear = Mathf.Min(currentGear + 1, MaxGear);
+        RumbleManager.instance.RumblePulse(0.1f,0.5f, 0.15f);
     }
 
     public void OnShiftDown(InputAction.CallbackContext ctx)
@@ -391,6 +371,7 @@ public class CarControl : MonoBehaviour
         if (currentGear == 0 && speedKph > 5f) return;
 
         currentGear = Mathf.Max(currentGear - 1, -1);
+        RumbleManager.instance.RumblePulse(0.1f,0.5f, 0.15f);
     }
 
     public void OnSwitchCamera(InputAction.CallbackContext ctx)
@@ -399,9 +380,7 @@ public class CarControl : MonoBehaviour
             switchCameraPressed = true;
     }
 
-    // =======================
     // CAMERA
-    // =======================
 
     private void SwitchCamera()
     {
