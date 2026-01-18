@@ -563,7 +563,7 @@ MonoBehaviour:
     SplineCurvature: 0.5
   RecenteringTarget: 2
   HorizontalAxis:
-    Value: -155.20277
+    Value: -85.31493
     Center: 0
     Range: {x: -180, y: 180}
     Wrap: 1
@@ -573,7 +573,7 @@ MonoBehaviour:
       Time: 2
     Restrictions: 0
   VerticalAxis:
-    Value: 39.870518
+    Value: 39.34334
     Center: 4.5
     Range: {x: -10, y: 45}
     Wrap: 0
@@ -661,8 +661,6 @@ MonoBehaviour:
       Input:
         InputAction: {fileID: -8693326400407208603, guid: f0bd5736679c09242bfb89c54c7bac5b, type: 3}
         Gain: 1
-        LegacyInput: 
-        LegacyGain: 1
         CancelDeltaTime: 0
       InputValue: 0
       Driver:
@@ -674,8 +672,6 @@ MonoBehaviour:
       Input:
         InputAction: {fileID: -8693326400407208603, guid: f0bd5736679c09242bfb89c54c7bac5b, type: 3}
         Gain: -1
-        LegacyInput: 
-        LegacyGain: 1
         CancelDeltaTime: 0
       InputValue: -0
       Driver:
@@ -687,8 +683,6 @@ MonoBehaviour:
       Input:
         InputAction: {fileID: 5082991133974614888, guid: 1d6e640e716dc4ff6989b73d02023f2b, type: 3}
         Gain: -1
-        LegacyInput: 
-        LegacyGain: 1
         CancelDeltaTime: 0
       InputValue: -0
       Driver:
@@ -3814,7 +3808,6 @@ GameObject:
   - component: {fileID: 5871676455377057720}
   - component: {fileID: 5745371911273217217}
   - component: {fileID: 1416790264899304711}
-  - component: {fileID: 1592280971038412373}
   m_Layer: 0
   m_Name: LOD_A_CHASSIS_mm_misc
   m_TagString: Untagged
@@ -3893,28 +3886,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!64 &1592280971038412373
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4099181657259185053}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 5
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 23615515755370812, guid: 3de0e784ca6eab34188d468bac0226e6, type: 3}
 --- !u!1 &4148048411688877796
 GameObject:
   m_ObjectHideFlags: 0
@@ -4049,7 +4020,7 @@ Camera:
   m_GameObject: {fileID: 4220604246569304543}
   m_Enabled: 1
   serializedVersion: 2
-  m_ClearFlags: 4
+  m_ClearFlags: 1
   m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
@@ -4122,8 +4093,8 @@ MonoBehaviour:
     m_Bits: 1
   m_VolumeTrigger: {fileID: 0}
   m_VolumeFrameworkUpdateModeOption: 2
-  m_RenderPostProcessing: 0
-  m_Antialiasing: 0
+  m_RenderPostProcessing: 1
+  m_Antialiasing: 3
   m_AntialiasingQuality: 2
   m_StopNaN: 0
   m_Dithering: 0
@@ -4534,9 +4505,10 @@ GameObject:
   - component: {fileID: 4767860854996734818}
   - component: {fileID: 2210383108359336548}
   - component: {fileID: 4879477585472811285}
+  - component: {fileID: 4899765059107727707}
   m_Layer: 0
   m_Name: Mustang
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -4869,6 +4841,27 @@ MonoBehaviour:
   m_DefaultActionMap: Player
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 6143466908818314196}
+--- !u!65 &4899765059107727707
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4499710006001955993}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1, y: 0.59088004, z: 1.0000002}
+  m_Center: {x: 2.8421648e-15, y: 0.60578436, z: 1.8}
 --- !u!1 &4718721862413102499
 GameObject:
   m_ObjectHideFlags: 0
@@ -7163,7 +7156,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: -125.79999, y: 119.100006}
+  m_AnchoredPosition: {x: -125.79999, y: 119.10004}
   m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1330560442258965894
