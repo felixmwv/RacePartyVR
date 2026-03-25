@@ -11,12 +11,12 @@ public class Checkpoint : MonoBehaviour
             return;
         }
 
-        RaceManager raceManager = other.GetComponent<RaceManager>();
-        if (raceManager == null)
+        PlayerRaceController playerRaceController = other.GetComponent<PlayerRaceController>();
+        if (playerRaceController == null)
         {
             return;
         }
 
-        raceManager.CheckPointReached(checkpointIndex);
+        playerRaceController.CheckPointReached(checkpointIndex);
     }
 }

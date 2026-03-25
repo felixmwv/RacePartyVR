@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 53ca1ac3991c13d4ea3fc1a21b0fa3f3, type: 3}
+  m_Name: Inline6
+  m_EditorClassIdentifier: Assembly-CSharp::CarEngineSoundSO
+  rpmStep: 500
+  engineRPMRangeArray:
+  - {fileID: 8300000, guid: e3d18b86d17d5734f9c58dc9de3f5bc0, type: 3}
+  - {fileID: 8300000, guid: 7c996b70e667042408c80725a281a1e4, type: 3}
+  - {fileID: 8300000, guid: a4ee248cf1429af44a121e2fc3fabaa1, type: 3}
+  - {fileID: 8300000, guid: 0279099ed026d854089e3b2315a1036b, type: 3}
+  - {fileID: 8300000, guid: a9b479eaca6aa7a47a5e79d1f045ba9d, type: 3}
+  - {fileID: 8300000, guid: 50c706d5a13c1dc4d9213f38b4533abf, type: 3}
+  - {fileID: 8300000, guid: d17f252ade37c3e44b100ff43bbf9dd0, type: 3}
+  - {fileID: 8300000, guid: b3de124b7bf35ae4f9379abe3b3be5ab, type: 3}
+  - {fileID: 8300000, guid: e0588dc0d21b3434799f1263324a50f1, type: 3}
+  - {fileID: 8300000, guid: 38739bda7273d3c4da2251574bd9f399, type: 3}
+  - {fileID: 8300000, guid: a6a1e08cb11288947bd720a73b3c8164, type: 3}

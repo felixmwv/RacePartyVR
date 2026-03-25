@@ -1,136 +1,83 @@
-using System;
-using TMPro;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class RaceManager : MonoBehaviour
 {
-   [SerializeField] private TextMeshProUGUI currentLapTimeText;
-   [SerializeField] private TextMeshProUGUI overallRaceTimeText;
-   [SerializeField] private TextMeshProUGUI bestLapTimeText;
-   [SerializeField] private TextMeshProUGUI lapText;
-   
-   [SerializeField] private Checkpoint[] checkpoints;
-   [SerializeField] private int lastCheckpointIndex = -1;
-   [SerializeField] private bool isCircuit;
-   [SerializeField] private int totalLaps = 1;
-   
-   private int currentLap = 1;
-   
-   private bool raceStarted;
-   private bool raceFinished;
+   public static RaceManager Instance { get; private set; }
 
-   private float currentLapTime = 0f;
-   private float overallRaceTime = 0f;
-   private float bestLapTime = Mathf.Infinity;
+   private readonly List<PlayerRaceController> players = new();
+   private readonly List<PlayerRaceController> finishedPlayers = new();
 
    private void Awake()
    {
-      FindCheckpoints();
-   }
-
-   private void Update()
-   {
-      if (raceStarted)
+      if (Instance != null)
       {
-         UpdateTimers();
-      }
-      UpdateUI();
-   }
-   private void FindCheckpoints()
-   {
-      GameObject checkpointsParent = GameObject.Find("Checkpoints");
-      if (checkpointsParent == null)
-      {
-         Debug.LogError("No 'Checkpoints' object found in scene.");
+         Destroy(gameObject);
          return;
       }
 
-      checkpoints = checkpointsParent.GetComponentsInChildren<Checkpoint>();
-
-      Array.Sort(checkpoints, (a, b) => a.checkpointIndex.CompareTo(b.checkpointIndex));
+      Instance = this;
    }
 
-
-   public void CheckPointReached(int checkpointIndex)
+   public void RegisterPlayer(PlayerRaceController player)
    {
-      if (!raceStarted && checkpointIndex != 0 || raceFinished) return;
+      if (!players.Contains(player))
+         players.Add(player);
+   }
 
-      if (checkpointIndex == lastCheckpointIndex + 1)
+   public void UnregisterPlayer(PlayerRaceController player)
+   {
+      players.Remove(player);
+   }
+
+   public int GetPlayerPosition(PlayerRaceController player)
+   {
+      UpdateRaceOrder();
+      return players.IndexOf(player) + 1;
+   }
+
+   public int PlayerCount => players.Count;
+
+   private void UpdateRaceOrder()
+   {
+      players.Sort((a, b) =>
       {
-         UpdateCheckpoint(checkpointIndex);
-      }
-      Debug.Log($"{gameObject.name} hit checkpoint {checkpointIndex}");
-   }
+         // Finished players ALWAYS stay ahead
+         if (a.HasFinished && !b.HasFinished) return -1;
+         if (!a.HasFinished && b.HasFinished) return 1;
 
-   public void UpdateCheckpoint(int checkpointIndex)
+         if (a.CurrentLap != b.CurrentLap)
+            return b.CurrentLap.CompareTo(a.CurrentLap);
+
+         if (a.LastCheckpointIndex != b.LastCheckpointIndex)
+            return b.LastCheckpointIndex.CompareTo(a.LastCheckpointIndex);
+
+         return a.DistanceToNextCheckpoint.CompareTo(b.DistanceToNextCheckpoint);
+      });
+
+   }
+   public void NotifyPlayerFinished(PlayerRaceController player)
    {
-      if (checkpointIndex == 0)
+      if (finishedPlayers.Contains(player))
+         return;
+
+      finishedPlayers.Add(player);
+
+      int place = finishedPlayers.Count;
+
+      Debug.Log($"{place}{GetSuffix(place)} car finished: {player.name}");
+   }
+   private string GetSuffix(int pos)
+   {
+      return pos switch
       {
-         if (!raceStarted)
-         {
-            StartRace();
-         }
-         else if (isCircuit && lastCheckpointIndex == checkpoints.Length - 1)
-         { 
-            OnLapFinish();
-         }
-      }
-      else if (!isCircuit && checkpointIndex == checkpoints.Length - 1)
-      {
-         OnLapFinish();
-      }
-      lastCheckpointIndex = checkpointIndex;
+         1 => "st",
+         2 => "nd",
+         3 => "rd",
+         _ => "th"
+      };
    }
 
-   private void OnLapFinish()
-   {
-      currentLap++;
-      if (currentLapTime < bestLapTime)
-      {
-         bestLapTime = currentLapTime;
-      }
-      if (currentLap > totalLaps)
-      {
-         EndRace();
-      }
-      else
-      {
-         currentLapTime = 0f;
-         lastCheckpointIndex = isCircuit ? 0 : -1;
-      }
-     
-   }
-   private void StartRace()
-   {
-      raceStarted = true;
-      raceFinished = false;
-   }
 
-   private void EndRace()
-   {
-      raceFinished = true;
-      raceStarted = false;
-   }
-
-   private void UpdateTimers()
-   {
-      currentLapTime += Time.deltaTime;
-      overallRaceTime += Time.deltaTime;
-   }
-
-   private void UpdateUI()
-   {
-      currentLapTimeText.text = FormatTime(currentLapTime);
-      overallRaceTimeText.text = FormatTime(overallRaceTime);
-      lapText.text = "Lap: " + currentLap + "/" + totalLaps;
-      bestLapTimeText.text = FormatTime(bestLapTime);
-   }
-
-   private string FormatTime(float time)
-   {
-      if (float.IsInfinity(time) || time < 0) return "--:--";
-      int minutes = (int)time / 60;
-      float seconds = time % 60;
-      return string.Format("{0:00}:{1:00}", minutes, seconds);
-   }
 }
+

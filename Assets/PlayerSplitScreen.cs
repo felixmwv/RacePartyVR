@@ -139,7 +139,7 @@ public partial class @PlayerSplitScreen: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": ""Throttle"",
-                    ""type"": ""Value"",
+                    ""type"": ""PassThrough"",
                     ""id"": ""db29a4a9-5686-44ee-9808-f916e2a6b501"",
                     ""expectedControlType"": ""Axis"",
                     ""processors"": """",
@@ -163,12 +163,30 @@ public partial class @PlayerSplitScreen: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""OnReady"",
+                    ""type"": ""Button"",
+                    ""id"": ""973b200e-3a84-4b70-be63-640d0c5bd310"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""OnJoin"",
+                    ""type"": ""Button"",
+                    ""id"": ""d565bef8-ad25-47a3-b412-04ee1a895198"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
                 {
                     ""name"": ""1D Axis"",
-                    ""id"": ""c0607680-1ff1-425c-913f-4482922ee4ed"",
+                    ""id"": ""b6f23d7a-f16b-44a3-aadd-9b4d0d6074a3"",
                     ""path"": ""1DAxis"",
                     ""interactions"": """",
                     ""processors"": """",
@@ -179,7 +197,7 @@ public partial class @PlayerSplitScreen: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": ""negative"",
-                    ""id"": ""c112e91c-9815-427c-b36e-47e423618d05"",
+                    ""id"": ""1c813d74-d86a-49c9-9d15-fca5f9e42530"",
                     ""path"": ""<Gamepad>/leftStick/left"",
                     ""interactions"": """",
                     ""processors"": """",
@@ -190,7 +208,7 @@ public partial class @PlayerSplitScreen: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": ""positive"",
-                    ""id"": ""2cac73ef-3097-4fec-af12-8982b6242bd4"",
+                    ""id"": ""3352808d-b8ab-4f2a-89c8-03c7f49761e5"",
                     ""path"": ""<Gamepad>/leftStick/right"",
                     ""interactions"": """",
                     ""processors"": """",
@@ -200,15 +218,37 @@ public partial class @PlayerSplitScreen: IInputActionCollection2, IDisposable
                     ""isPartOfComposite"": true
                 },
                 {
-                    ""name"": """",
-                    ""id"": ""d9644b08-c3bf-4ed3-97cc-c77ef0d8b599"",
-                    ""path"": ""<HID::Gudsen R3 Racing Wheel and Pedals>/stick/x"",
+                    ""name"": ""1D Axis"",
+                    ""id"": ""25f2c6ce-e74d-4644-b3c4-d4d4095d0981"",
+                    ""path"": ""1DAxis"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""Steer"",
-                    ""isComposite"": false,
+                    ""isComposite"": true,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""negative"",
+                    ""id"": ""79e58582-f17a-44ef-ac4f-b9feb53b1067"",
+                    ""path"": ""<HID::Gudsen R3 Racing Wheel and Pedals>/stick/left"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Steering Wheel"",
+                    ""action"": ""Steer"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""positive"",
+                    ""id"": ""45c4df29-8a23-4ba6-963c-d518ea32a7dc"",
+                    ""path"": ""<HID::Gudsen R3 Racing Wheel and Pedals>/stick/right"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Steering Wheel"",
+                    ""action"": ""Steer"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
                 },
                 {
                     ""name"": """",
@@ -227,7 +267,7 @@ public partial class @PlayerSplitScreen: IInputActionCollection2, IDisposable
                     ""path"": ""<HID::Gudsen R3 Racing Wheel and Pedals>/button22"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": """",
+                    ""groups"": "";Steering Wheel"",
                     ""action"": ""CamSwitch"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
@@ -249,7 +289,7 @@ public partial class @PlayerSplitScreen: IInputActionCollection2, IDisposable
                     ""path"": ""<HID::Gudsen R3 Racing Wheel and Pedals>/button14"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": """",
+                    ""groups"": "";Steering Wheel"",
                     ""action"": ""ShiftUp"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
@@ -271,7 +311,7 @@ public partial class @PlayerSplitScreen: IInputActionCollection2, IDisposable
                     ""path"": ""<HID::Gudsen R3 Racing Wheel and Pedals>/button13"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": """",
+                    ""groups"": "";Steering Wheel"",
                     ""action"": ""ShiftDown"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
@@ -290,10 +330,10 @@ public partial class @PlayerSplitScreen: IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""0a858753-d0ac-42bd-8a35-49900712648b"",
-                    ""path"": ""<HID::Gudsen R3 Racing Wheel and Pedals>/rz"",
+                    ""path"": ""<HID::SIMSONN SIMSONN Plus X>/stick/y"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": """",
+                    ""groups"": "";Steering Wheel"",
                     ""action"": ""Brake"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
@@ -311,11 +351,11 @@ public partial class @PlayerSplitScreen: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
-                    ""id"": ""1609984c-889c-49ca-b3f4-e977cf50bb7a"",
-                    ""path"": ""<HID::Gudsen R3 Racing Wheel and Pedals>/z"",
+                    ""id"": ""ee62f8c8-9723-4ac6-bee6-f617f8061a18"",
+                    ""path"": ""<HID::SIMSONN SIMSONN Plus X>/stick/x"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": """",
+                    ""groups"": "";Steering Wheel"",
                     ""action"": ""Throttle"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
@@ -339,6 +379,50 @@ public partial class @PlayerSplitScreen: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": "";GamePad"",
                     ""action"": ""HandBrake"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""b59d6669-1ceb-4c61-8043-d33ae971a209"",
+                    ""path"": ""<Gamepad>/buttonNorth"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";GamePad"",
+                    ""action"": ""OnReady"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""1e09020b-16d9-4ca8-abfc-f293132ab1f3"",
+                    ""path"": ""<HID::Gudsen R3 Racing Wheel and Pedals>/button4"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Steering Wheel"",
+                    ""action"": ""OnReady"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""fd21d7cd-b101-4a4a-9483-ca96f8f5918e"",
+                    ""path"": ""<Gamepad>/buttonWest"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";GamePad"",
+                    ""action"": ""OnJoin"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""068d8ab4-6286-4fc6-950a-7d16a375c3aa"",
+                    ""path"": ""<HID::Gudsen R3 Racing Wheel and Pedals>/button3"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Steering Wheel"",
+                    ""action"": ""OnJoin"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -397,11 +481,16 @@ public partial class @PlayerSplitScreen: IInputActionCollection2, IDisposable
             ]
         },
         {
-            ""name"": ""New Control Scheme1"",
-            ""bindingGroup"": ""New Control Scheme1"",
+            ""name"": ""Steering Wheel"",
+            ""bindingGroup"": ""Steering Wheel"",
             ""devices"": [
                 {
-                    ""devicePath"": ""<Gamepad>"",
+                    ""devicePath"": ""<HID::Gudsen R3 Racing Wheel and Pedals>"",
+                    ""isOptional"": false,
+                    ""isOR"": false
+                },
+                {
+                    ""devicePath"": ""<HID::SIMSONN SIMSONN Plus X>"",
                     ""isOptional"": false,
                     ""isOR"": false
                 }
@@ -419,6 +508,8 @@ public partial class @PlayerSplitScreen: IInputActionCollection2, IDisposable
         m_Player_Throttle = m_Player.FindAction("Throttle", throwIfNotFound: true);
         m_Player_MoveCamera = m_Player.FindAction("MoveCamera", throwIfNotFound: true);
         m_Player_HandBrake = m_Player.FindAction("HandBrake", throwIfNotFound: true);
+        m_Player_OnReady = m_Player.FindAction("OnReady", throwIfNotFound: true);
+        m_Player_OnJoin = m_Player.FindAction("OnJoin", throwIfNotFound: true);
         // Rumble
         m_Rumble = asset.FindActionMap("Rumble", throwIfNotFound: true);
         m_Rumble_RumbleAction = m_Rumble.FindAction("RumbleAction", throwIfNotFound: true);
@@ -511,6 +602,8 @@ public partial class @PlayerSplitScreen: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_Throttle;
     private readonly InputAction m_Player_MoveCamera;
     private readonly InputAction m_Player_HandBrake;
+    private readonly InputAction m_Player_OnReady;
+    private readonly InputAction m_Player_OnJoin;
     /// <summary>
     /// Provides access to input actions defined in input action map "Player".
     /// </summary>
@@ -554,6 +647,14 @@ public partial class @PlayerSplitScreen: IInputActionCollection2, IDisposable
         /// Provides access to the underlying input action "Player/HandBrake".
         /// </summary>
         public InputAction @HandBrake => m_Wrapper.m_Player_HandBrake;
+        /// <summary>
+        /// Provides access to the underlying input action "Player/OnReady".
+        /// </summary>
+        public InputAction @OnReady => m_Wrapper.m_Player_OnReady;
+        /// <summary>
+        /// Provides access to the underlying input action "Player/OnJoin".
+        /// </summary>
+        public InputAction @OnJoin => m_Wrapper.m_Player_OnJoin;
         /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
@@ -604,6 +705,12 @@ public partial class @PlayerSplitScreen: IInputActionCollection2, IDisposable
             @HandBrake.started += instance.OnHandBrake;
             @HandBrake.performed += instance.OnHandBrake;
             @HandBrake.canceled += instance.OnHandBrake;
+            @OnReady.started += instance.OnOnReady;
+            @OnReady.performed += instance.OnOnReady;
+            @OnReady.canceled += instance.OnOnReady;
+            @OnJoin.started += instance.OnOnJoin;
+            @OnJoin.performed += instance.OnOnJoin;
+            @OnJoin.canceled += instance.OnOnJoin;
         }
 
         /// <summary>
@@ -639,6 +746,12 @@ public partial class @PlayerSplitScreen: IInputActionCollection2, IDisposable
             @HandBrake.started -= instance.OnHandBrake;
             @HandBrake.performed -= instance.OnHandBrake;
             @HandBrake.canceled -= instance.OnHandBrake;
+            @OnReady.started -= instance.OnOnReady;
+            @OnReady.performed -= instance.OnOnReady;
+            @OnReady.canceled -= instance.OnOnReady;
+            @OnJoin.started -= instance.OnOnJoin;
+            @OnJoin.performed -= instance.OnOnJoin;
+            @OnJoin.canceled -= instance.OnOnJoin;
         }
 
         /// <summary>
@@ -781,17 +894,17 @@ public partial class @PlayerSplitScreen: IInputActionCollection2, IDisposable
             return asset.controlSchemes[m_GamePadSchemeIndex];
         }
     }
-    private int m_NewControlScheme1SchemeIndex = -1;
+    private int m_SteeringWheelSchemeIndex = -1;
     /// <summary>
     /// Provides access to the input control scheme.
     /// </summary>
     /// <seealso cref="UnityEngine.InputSystem.InputControlScheme" />
-    public InputControlScheme NewControlScheme1Scheme
+    public InputControlScheme SteeringWheelScheme
     {
         get
         {
-            if (m_NewControlScheme1SchemeIndex == -1) m_NewControlScheme1SchemeIndex = asset.FindControlSchemeIndex("New Control Scheme1");
-            return asset.controlSchemes[m_NewControlScheme1SchemeIndex];
+            if (m_SteeringWheelSchemeIndex == -1) m_SteeringWheelSchemeIndex = asset.FindControlSchemeIndex("Steering Wheel");
+            return asset.controlSchemes[m_SteeringWheelSchemeIndex];
         }
     }
     /// <summary>
@@ -857,6 +970,20 @@ public partial class @PlayerSplitScreen: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnHandBrake(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "OnReady" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnOnReady(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "OnJoin" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnOnJoin(InputAction.CallbackContext context);
     }
     /// <summary>
     /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "Rumble" which allows adding and removing callbacks.

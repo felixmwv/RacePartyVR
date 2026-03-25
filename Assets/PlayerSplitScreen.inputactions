@@ -53,7 +53,7 @@
                 },
                 {
                     "name": "Throttle",
-                    "type": "Value",
+                    "type": "PassThrough",
                     "id": "db29a4a9-5686-44ee-9808-f916e2a6b501",
                     "expectedControlType": "Axis",
                     "processors": "",
@@ -77,12 +77,30 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "OnReady",
+                    "type": "Button",
+                    "id": "973b200e-3a84-4b70-be63-640d0c5bd310",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "OnJoin",
+                    "type": "Button",
+                    "id": "d565bef8-ad25-47a3-b412-04ee1a895198",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
                 {
                     "name": "1D Axis",
-                    "id": "c0607680-1ff1-425c-913f-4482922ee4ed",
+                    "id": "b6f23d7a-f16b-44a3-aadd-9b4d0d6074a3",
                     "path": "1DAxis",
                     "interactions": "",
                     "processors": "",
@@ -93,7 +111,7 @@
                 },
                 {
                     "name": "negative",
-                    "id": "c112e91c-9815-427c-b36e-47e423618d05",
+                    "id": "1c813d74-d86a-49c9-9d15-fca5f9e42530",
                     "path": "<Gamepad>/leftStick/left",
                     "interactions": "",
                     "processors": "",
@@ -104,7 +122,7 @@
                 },
                 {
                     "name": "positive",
-                    "id": "2cac73ef-3097-4fec-af12-8982b6242bd4",
+                    "id": "3352808d-b8ab-4f2a-89c8-03c7f49761e5",
                     "path": "<Gamepad>/leftStick/right",
                     "interactions": "",
                     "processors": "",
@@ -114,15 +132,37 @@
                     "isPartOfComposite": true
                 },
                 {
-                    "name": "",
-                    "id": "d9644b08-c3bf-4ed3-97cc-c77ef0d8b599",
-                    "path": "<HID::Gudsen R3 Racing Wheel and Pedals>/stick/x",
+                    "name": "1D Axis",
+                    "id": "25f2c6ce-e74d-4644-b3c4-d4d4095d0981",
+                    "path": "1DAxis",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
                     "action": "Steer",
-                    "isComposite": false,
+                    "isComposite": true,
                     "isPartOfComposite": false
+                },
+                {
+                    "name": "negative",
+                    "id": "79e58582-f17a-44ef-ac4f-b9feb53b1067",
+                    "path": "<HID::Gudsen R3 Racing Wheel and Pedals>/stick/left",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Steering Wheel",
+                    "action": "Steer",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "positive",
+                    "id": "45c4df29-8a23-4ba6-963c-d518ea32a7dc",
+                    "path": "<HID::Gudsen R3 Racing Wheel and Pedals>/stick/right",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Steering Wheel",
+                    "action": "Steer",
+                    "isComposite": false,
+                    "isPartOfComposite": true
                 },
                 {
                     "name": "",
@@ -141,7 +181,7 @@
                     "path": "<HID::Gudsen R3 Racing Wheel and Pedals>/button22",
                     "interactions": "",
                     "processors": "",
-                    "groups": "",
+                    "groups": ";Steering Wheel",
                     "action": "CamSwitch",
                     "isComposite": false,
                     "isPartOfComposite": false
@@ -163,7 +203,7 @@
                     "path": "<HID::Gudsen R3 Racing Wheel and Pedals>/button14",
                     "interactions": "",
                     "processors": "",
-                    "groups": "",
+                    "groups": ";Steering Wheel",
                     "action": "ShiftUp",
                     "isComposite": false,
                     "isPartOfComposite": false
@@ -185,7 +225,7 @@
                     "path": "<HID::Gudsen R3 Racing Wheel and Pedals>/button13",
                     "interactions": "",
                     "processors": "",
-                    "groups": "",
+                    "groups": ";Steering Wheel",
                     "action": "ShiftDown",
                     "isComposite": false,
                     "isPartOfComposite": false
@@ -204,10 +244,10 @@
                 {
                     "name": "",
                     "id": "0a858753-d0ac-42bd-8a35-49900712648b",
-                    "path": "<HID::Gudsen R3 Racing Wheel and Pedals>/rz",
+                    "path": "<HID::SIMSONN SIMSONN Plus X>/stick/y",
                     "interactions": "",
                     "processors": "",
-                    "groups": "",
+                    "groups": ";Steering Wheel",
                     "action": "Brake",
                     "isComposite": false,
                     "isPartOfComposite": false
@@ -225,11 +265,11 @@
                 },
                 {
                     "name": "",
-                    "id": "1609984c-889c-49ca-b3f4-e977cf50bb7a",
-                    "path": "<HID::Gudsen R3 Racing Wheel and Pedals>/z",
+                    "id": "ee62f8c8-9723-4ac6-bee6-f617f8061a18",
+                    "path": "<HID::SIMSONN SIMSONN Plus X>/stick/x",
                     "interactions": "",
                     "processors": "",
-                    "groups": "",
+                    "groups": ";Steering Wheel",
                     "action": "Throttle",
                     "isComposite": false,
                     "isPartOfComposite": false
@@ -253,6 +293,50 @@
                     "processors": "",
                     "groups": ";GamePad",
                     "action": "HandBrake",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "b59d6669-1ceb-4c61-8043-d33ae971a209",
+                    "path": "<Gamepad>/buttonNorth",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";GamePad",
+                    "action": "OnReady",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "1e09020b-16d9-4ca8-abfc-f293132ab1f3",
+                    "path": "<HID::Gudsen R3 Racing Wheel and Pedals>/button4",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Steering Wheel",
+                    "action": "OnReady",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "fd21d7cd-b101-4a4a-9483-ca96f8f5918e",
+                    "path": "<Gamepad>/buttonWest",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";GamePad",
+                    "action": "OnJoin",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "068d8ab4-6286-4fc6-950a-7d16a375c3aa",
+                    "path": "<HID::Gudsen R3 Racing Wheel and Pedals>/button3",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Steering Wheel",
+                    "action": "OnJoin",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
@@ -311,11 +395,16 @@
             ]
         },
         {
-            "name": "New Control Scheme1",
-            "bindingGroup": "New Control Scheme1",
+            "name": "Steering Wheel",
+            "bindingGroup": "Steering Wheel",
             "devices": [
                 {
-                    "devicePath": "<Gamepad>",
+                    "devicePath": "<HID::Gudsen R3 Racing Wheel and Pedals>",
+                    "isOptional": false,
+                    "isOR": false
+                },
+                {
+                    "devicePath": "<HID::SIMSONN SIMSONN Plus X>",
                     "isOptional": false,
                     "isOR": false
                 }
