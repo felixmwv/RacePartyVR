@@ -479,8 +479,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 591135658192100464}
   serializedVersion: 2
-  m_LocalRotation: {x: -0.24582593, y: 0.7535635, z: -0.41328645, w: -0.44822535}
-  m_LocalPosition: {x: 2.776277, y: 5.9563594, z: 1.508085}
+  m_LocalRotation: {x: 0.45730406, y: 0.10818577, z: -0.056161746, w: 0.8809169}
+  m_LocalPosition: {x: -0.8074222, y: 5.742507, z: -3.2376785}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -563,7 +563,7 @@ MonoBehaviour:
     SplineCurvature: 0.5
   RecenteringTarget: 2
   HorizontalAxis:
-    Value: -14.908236
+    Value: 52.32811
     Center: 0
     Range: {x: -180, y: 180}
     Wrap: 1
@@ -3151,7 +3151,6 @@ MonoBehaviour:
   skidThreshold: 0.5
   minSidewaysGrip: 0.75
   maxSidewaysGrip: 1.2
-  powerSlipStrength: 1.1
   brakeSidewaysGrip: 0.6
   normalSidewaysGrip: 1
   handbrakeSidewaysGrip: 0.3
@@ -4190,7 +4189,6 @@ MonoBehaviour:
   skidThreshold: 0.5
   minSidewaysGrip: 0.75
   maxSidewaysGrip: 1.2
-  powerSlipStrength: 1.1
   brakeSidewaysGrip: 0.6
   normalSidewaysGrip: 1
   handbrakeSidewaysGrip: 0.3
@@ -7655,14 +7653,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f1478e617646b934b9b70c7ec0896d20, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CarControlAfter
-  engineTorque: 650
+  engineTorque: 450
   brakeTorque: 4000
   engineBrakeTorque: 300
   maxSpeed: 200
   steeringRange: 30
   steeringRangeAtMaxSpeed: 12
-  maxSteerSpeed: 1.35
-  steerReturnSpeed: 3
+  maxSteerSpeed: 1.6
   finalDrive: 3.4
   gearRatios:
   - 3.2
@@ -7678,8 +7675,8 @@ MonoBehaviour:
     serializedVersion: 2
     m_Curve:
     - serializedVersion: 3
-      time: 0.002772639
-      value: 0.20132867
+      time: 0
+      value: 0.3
       inSlope: 0
       outSlope: 0
       tangentMode: 0
@@ -7687,8 +7684,17 @@ MonoBehaviour:
       inWeight: 0
       outWeight: 0
     - serializedVersion: 3
-      time: 0.2793213
-      value: 0.9958893
+      time: 0.1
+      value: 0.6
+      inSlope: 3.6869392
+      outSlope: 3.6869392
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.17114402
+    - serializedVersion: 3
+      time: 0.3
+      value: 1
       inSlope: 0
       outSlope: 0
       tangentMode: 0
@@ -7696,26 +7702,26 @@ MonoBehaviour:
       inWeight: 0
       outWeight: 0
     - serializedVersion: 3
-      time: 0.5487305
-      value: 0.950354
-      inSlope: 0
-      outSlope: 0
+      time: 0.6
+      value: 0.98
+      inSlope: -0.27270398
+      outSlope: -0.27270398
       tangentMode: 0
       weightedMode: 0
-      inWeight: 0
-      outWeight: 0
+      inWeight: 0.33333334
+      outWeight: 0.80305564
     - serializedVersion: 3
-      time: 0.7795368
-      value: 0.6977057
-      inSlope: -2.8250546
-      outSlope: -2.8250546
+      time: 0.8
+      value: 0.8
+      inSlope: -2.3107417
+      outSlope: -2.3107417
       tangentMode: 0
       weightedMode: 0
       inWeight: 0.33333334
       outWeight: 0.33333334
     - serializedVersion: 3
-      time: 0.99627686
-      value: 0.34749755
+      time: 1
+      value: 0.3
       inSlope: 0
       outSlope: 0
       tangentMode: 0
@@ -9251,7 +9257,6 @@ MonoBehaviour:
   skidThreshold: 0.5
   minSidewaysGrip: 0.55
   maxSidewaysGrip: 1
-  powerSlipStrength: 1
   brakeSidewaysGrip: 0.5
   normalSidewaysGrip: 1
   handbrakeSidewaysGrip: 0.3
@@ -9616,7 +9621,6 @@ MonoBehaviour:
   skidThreshold: 0.5
   minSidewaysGrip: 0.55
   maxSidewaysGrip: 1
-  powerSlipStrength: 1
   brakeSidewaysGrip: 0.5
   normalSidewaysGrip: 1
   handbrakeSidewaysGrip: 0.3

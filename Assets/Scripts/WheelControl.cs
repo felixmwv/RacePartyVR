@@ -41,6 +41,12 @@ public class WheelControl : MonoBehaviour
             skidSmoke.Stop();
     }
 
+    private void Update()
+    {
+        WheelCollider.GetWorldPose(out position, out rotation);
+        wheelModel.transform.position = position;
+        wheelModel.transform.rotation = rotation;
+    }
     public void UpdateDynamicGrip(float rpm01, float torquePressure, float surfaceGrip)
     {
         if ( !motorized ) return;
@@ -117,12 +123,7 @@ public class WheelControl : MonoBehaviour
     {
         SkidCheck();
     }
-    private void Update()
-    {
-        WheelCollider.GetWorldPose(out position, out rotation);
-        wheelModel.transform.position = position;
-        wheelModel.transform.rotation = rotation;
-    }
+    
     private void SkidCheck()
     {
         if (!WheelCollider.isGrounded)
