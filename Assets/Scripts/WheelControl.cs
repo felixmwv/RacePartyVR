@@ -4,6 +4,7 @@ using UnityEngine;
 public class WheelControl : MonoBehaviour
 {
     public Transform wheelModel;
+    public Vector3 modelOffset = Vector3.zero;
     [Header("Skid FX")]
     [SerializeField] private ParticleSystem skidSmoke;
     [SerializeField] private float skidThreshold = 0.35f;
@@ -44,7 +45,7 @@ public class WheelControl : MonoBehaviour
     private void Update()
     {
         WheelCollider.GetWorldPose(out position, out rotation);
-        wheelModel.transform.position = position;
+        wheelModel.transform.position = position + this.transform.TransformDirection( this.modelOffset );
         wheelModel.transform.rotation = rotation;
     }
     public void UpdateDynamicGrip(float rpm01, float torquePressure, float surfaceGrip)

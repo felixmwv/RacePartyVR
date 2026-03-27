@@ -29,6 +29,8 @@ public class CarControlAfter : MonoBehaviour
 	public float steeringRange = 22f;
 	public float steeringRangeAtMaxSpeed = 8f;
 	public float maxSteerSpeed = 0.9f;
+	public float wheelBase  = 2.6f;
+	public float trackWidth = 1.8f;
 	
 	[Header( "Drivetrain" )]
 	public float finalDrive = 3.4f;
@@ -114,7 +116,7 @@ public class CarControlAfter : MonoBehaviour
 		float speed01 = Mathf.InverseLerp( 0f, this.maxSpeed, speedKph );
 
 		this.ApplySteering( speed01 );
-		this.UpdateEngineRPM2();
+		this.UpdateEngineRPM();
 
 		float rpm01        = Mathf.InverseLerp( this.idleRPM, this.redlineRPM, this.engineRPM );
 		float overrev01    = Mathf.InverseLerp( this.redlineRPM, this.maxRPM, this.engineRPM );
@@ -122,6 +124,7 @@ public class CarControlAfter : MonoBehaviour
 
 		float baseTorque = this.CalculateBaseTorque( rpm01, revLimiter );
 		this.ApplyWheelForces( speedKph, baseTorque, rpm01, overrev01 );
+		this.ApplyStabilisation();
 	}
 
 	// -------------------------------------------------------------------------
@@ -135,17 +138,23 @@ public class CarControlAfter : MonoBehaviour
 	{
 		float steerInput = this.steerInputRaw * Mathf.Lerp( 1f, 0.6f, speed01 );
 
+		Vector3 localVel      = this.transform.InverseTransformDirection( this.rb.linearVelocity );
+		float   slipAngle     = this.rb.linearVelocity.magnitude > 1f
+			? Mathf.Abs( Mathf.Atan2( localVel.x, localVel.z ) * Mathf.Rad2Deg )
+			: 0f;
+		float   slipBoost     = Mathf.InverseLerp( 15f, 50f, slipAngle );
+		float   dynamicSteerSpeed = Mathf.Lerp( this.maxSteerSpeed, this.maxSteerSpeed * 2.5f, slipBoost );
+
 		this.smoothSteer = Mathf.MoveTowards(
 			this.smoothSteer,
 			steerInput,
-			this.maxSteerSpeed * Time.fixedDeltaTime
+			dynamicSteerSpeed * Time.fixedDeltaTime
 		);
 
 		float steerAngle = Mathf.Lerp( this.steeringRange, this.steeringRangeAtMaxSpeed, speed01 );
 		
 		// calculate angle between where car is looking and where car is moving
 		float alignTorqueBlend = 0f;
-		//float selfAlignAngle   = 0f;
 		
 		if ( this.rb.linearVelocity.magnitude > 3f )
 		{
@@ -173,54 +182,38 @@ public class CarControlAfter : MonoBehaviour
 			alignTorqueBlend * 0.5f
 		);
 
+		// calculate ackermann steering angle 
 		foreach ( WheelControl w in this.wheels )
 		{
-			if ( w.steerable )
-				w.WheelCollider.steerAngle = finalAngle;
+			if ( !w.steerable ) continue;
+
+			if ( Mathf.Abs( finalAngle ) < 0.01f )
+			{
+				w.WheelCollider.steerAngle = 0f;
+				continue;
+			}
+			
+			float radius = this.wheelBase / Mathf.Tan( finalAngle * Mathf.Deg2Rad );
+			
+			float innerAngle = Mathf.Rad2Deg * Mathf.Atan( this.wheelBase
+			                                               / ( radius - this.trackWidth * 0.5f ) );
+			float outerAngle = Mathf.Rad2Deg * Mathf.Atan( this.wheelBase
+			                                               / ( radius + this.trackWidth * 0.5f ) );
+			
+			bool turningLeft = finalAngle > 0f;
+
+			if ( w.side == WheelControl.WheelSide.Left )
+				w.WheelCollider.steerAngle = turningLeft ? innerAngle : outerAngle;
+			else
+				w.WheelCollider.steerAngle = turningLeft ? outerAngle : innerAngle;
 		}
 	}
 	/// <summary>
 	/// Drives engine RPM: throttle input raises target RPM toward redline,
 	/// releasing throttle lets it fall back toward idle (engine braking).
 	/// </summary>
-	private void UpdateEngineRPM()
-	{
-		float wheelRPM = 0f;
-		int driven = 0;
-
-		foreach ( WheelControl w in this.wheels )
-		{
-			if ( !w.motorized ) continue;
-			wheelRPM += Mathf.Abs( w.WheelCollider.rpm );
-			driven++;
-		}
-
-		if ( driven > 0 ) wheelRPM /= driven;
-		
-		float drivetrainRPM = this.currentGear > 0
-			? wheelRPM * this.gearRatios[ this.currentGear - 1 ] * this.finalDrive
-			: wheelRPM * this.finalDrive;
-
-		float targetRPM = Mathf.Max( this.idleRPM, drivetrainRPM );
-		
-		float speedKph    = this.rb.linearVelocity.magnitude * 3.6f;
-		float movingBlend = Mathf.InverseLerp( 5f, 30f, speedKph );
-
-		if ( movingBlend < 1f )
-		{
-			float launchTarget = Mathf.Lerp( this.idleRPM, this.redlineRPM * 0.6f, this.throttleInput );
-			targetRPM = Mathf.Lerp( launchTarget, targetRPM, movingBlend );
-		}
-		
-		float riseSpeed = Mathf.Lerp( 1f, 3.5f, this.throttleInput );
-		float fallSpeed  = 3f;
-		float blendSpeed = drivetrainRPM > this.engineRPM ? riseSpeed : fallSpeed;
-		
-		this.engineRPM = Mathf.Lerp( this.engineRPM, targetRPM, Time.fixedDeltaTime * blendSpeed );
-		this.engineRPM = Mathf.Clamp( this.engineRPM, this.idleRPM, this.maxRPM );
-	}
 	
-	private void UpdateEngineRPM2()
+	private void UpdateEngineRPM()
 	{
 		float speedMs     = this.rb.linearVelocity.magnitude;
 		float wheelRadius = 0.335f;
@@ -230,21 +223,32 @@ public class CarControlAfter : MonoBehaviour
 			? wheelRPM * this.gearRatios[ this.currentGear - 1 ] * this.finalDrive
 			: wheelRPM * this.finalDrive;
 
-		float targetRPM = Mathf.Max( this.idleRPM, drivetrainRPM );
+		float targetRPM;
+
+		if ( this.throttleInput > 0.01f )
+		{
+			targetRPM = Mathf.Max( this.idleRPM, drivetrainRPM );
+		}
+		else
+		{
+			targetRPM = this.idleRPM;
+		}
 		
 		float speedKph    = speedMs * 3.6f;
 		float movingBlend = Mathf.InverseLerp( 3f, 20f, speedKph );
 
-		if ( movingBlend < 1f )
+		if ( movingBlend < 1f && this.throttleInput > 0.01f )
 		{
 			float idleBlip = this.idleRPM * ( 1f + this.throttleInput * 0.2f );
 			targetRPM = Mathf.Lerp( idleBlip, targetRPM, movingBlend );
 		}
+		
+		float blendSpeed  = this.throttleInput > 0.01f ? 8f : 0.8f;
 
-		this.engineRPM = Mathf.Lerp( this.engineRPM, targetRPM, Time.fixedDeltaTime * 10f );
+		this.engineRPM = Mathf.Lerp( this.engineRPM, targetRPM, Time.fixedDeltaTime * blendSpeed );
 		this.engineRPM = Mathf.Clamp( this.engineRPM, this.idleRPM, this.maxRPM );
 	}
-
+	
 	/// <summary>
 	/// Returns the drive torque for this physics step; returns 0 if the rev limiter is active.
 	/// </summary>
@@ -252,9 +256,9 @@ public class CarControlAfter : MonoBehaviour
 	{
 		if ( revLimiter ) return 0f;
 		if ( this.currentGear == 0 ) return 0f;
-
-		float throttleResponse = Mathf.Lerp( this.throttleInput, this.throttleInput * this.throttleInput, 0.6f );
-
+		
+		float throttleResponse = Mathf.Lerp( this.throttleInput, this.throttleInput * this.throttleInput, 0.25f );
+		
 		float torque = this.engineTorque
 		               * this.torqueCurve.Evaluate( rpm01 )
 		               * this.finalDrive
@@ -284,6 +288,9 @@ public class CarControlAfter : MonoBehaviour
 			w.WheelCollider.motorTorque = 0f;
 			w.WheelCollider.brakeTorque = 0f;
 
+			if ( !w.isFront )
+				w.SetHandbrake( this.handbrakeInput );
+			
 			if ( !w.motorized )
 				continue;
 
@@ -299,8 +306,12 @@ public class CarControlAfter : MonoBehaviour
 			if ( this.brakeInput > 0.01f )
 				w.WheelCollider.brakeTorque = this.brakeInput * this.brakeTorque;
 			
-			if ( this.handbrakeInput )
+			if ( this.handbrakeInput && !w.isFront )
 				w.WheelCollider.brakeTorque = this.brakeTorque;
+			else
+			{
+				w.SetHandbrake( false );
+			}
 			
 			float rpmOverThreshold = Mathf.InverseLerp( 0.85f, 1f, rpm01 );
 			
@@ -328,7 +339,30 @@ public class CarControlAfter : MonoBehaviour
 		this.UpdateRumble( speedKph, rumbleLow, rumbleHigh, rumbleWheels );
 		
 	}
+	
+	/// <summary>
+	/// Applies a subtle corrective torque when the car spins beyond a recoverable angle,
+	/// trying to give an arcade like forgiving drift feeling.
+	/// </summary>
+	private void ApplyStabilisation()
+	{
+		float yawRate = this.rb.angularVelocity.y;
+		
+		float speedKph = this.rb.linearVelocity.magnitude * 3.6f;
+		if ( speedKph < 20f ) return;
+		
+		Vector3 localVelocity = this.transform.InverseTransformDirection( this.rb.linearVelocity );
+		float slipAngle = Mathf.Atan2( localVelocity.x, localVelocity.z ) * Mathf.Rad2Deg;
+		
+		float excessSlip = Mathf.Abs( slipAngle ) - 35f;
+		if ( excessSlip <= 0f ) return;
+		
+		float correctionStrength = Mathf.InverseLerp( 0f, 45f, excessSlip );
+		float correctionTorque   = -Mathf.Sign( yawRate ) * correctionStrength * 2500f;
 
+		this.rb.AddTorque( 0f, correctionTorque, 0f, ForceMode.Force );
+	}
+	
 	/// <summary>
 	/// Sends a per-frame rumble pulse when the car is moving on a surface, or stops it otherwise.
 	/// </summary>
@@ -367,7 +401,7 @@ public class CarControlAfter : MonoBehaviour
 
 	public void OnHandBrake(InputAction.CallbackContext ctx)
 	{
-		this.handbrakeInput = ctx.ReadValue<bool>();
+		this.handbrakeInput = ctx.ReadValue<float>() > 0.5f;
 	}
 
 	public void OnSteer( InputAction.CallbackContext ctx )
