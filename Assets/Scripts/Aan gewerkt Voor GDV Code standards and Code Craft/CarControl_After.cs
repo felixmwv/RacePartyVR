@@ -320,11 +320,11 @@ public class CarControlAfter : MonoBehaviour
 		Vector3 localVelocity = this.transform.InverseTransformDirection( this.rb.linearVelocity );
 		float slipAngle = Mathf.Atan2( localVelocity.x, localVelocity.z ) * Mathf.Rad2Deg;
  
-		float excessSlip = Mathf.Abs( slipAngle ) - 30f;
+		float excessSlip = Mathf.Abs( slipAngle ) - 20f;
 		if ( excessSlip <= 0f ) return;
  
 		float correctionStrength = Mathf.InverseLerp( 0f, 45f, excessSlip );
-		float correctionTorque = -Mathf.Sign( yawRate ) * correctionStrength * 6000f;
+		float correctionTorque = -Mathf.Sign( yawRate ) * correctionStrength * 5000f;
  
 		this.rb.AddTorque( 0f, correctionTorque, 0f, ForceMode.Force );
 	}
