@@ -8,6 +8,7 @@ public class EngineAudioController : MonoBehaviour
 {
     [Header( "References" )]
     public CarEngineSoundSO engineSoundData;
+    public CarHandlingSO handling;
     public CarControlAfter carControl;
 
     [Header( "Fade" )]
@@ -39,8 +40,8 @@ public class EngineAudioController : MonoBehaviour
 
     private void Update()
     {
-        float currentRPM = this.carControl.EngineRPM;
-        float idleRPM = this.carControl.idleRPM;
+        float currentRpm = this.carControl.EngineRpm;
+        float idleRpm = this.handling.idleRpm;
         float rpmStep = this.engineSoundData.rpmStep;
 
         int clipCount = this.engineSoundData.engineRPMRangeArray.Length;
@@ -53,8 +54,8 @@ public class EngineAudioController : MonoBehaviour
                 continue;
             }
             
-            float preferredRPM = ( i * rpmStep ) + idleRPM;
-            float rpmDiff = preferredRPM - currentRPM;
+            float preferredRpm = ( i * rpmStep ) + idleRpm;
+            float rpmDiff = preferredRpm - currentRpm;
 
             float targetVolume;
             float targetPitch;
@@ -62,7 +63,7 @@ public class EngineAudioController : MonoBehaviour
             if ( rpmDiff < rpmStep * 2f && rpmDiff > -rpmStep * 2f )
             {
                 targetVolume = rpmStep / ( Mathf.Abs( rpmDiff ) + rpmStep );
-                targetPitch  = currentRPM / preferredRPM;
+                targetPitch  = currentRpm / preferredRpm;
             }
             else
             {

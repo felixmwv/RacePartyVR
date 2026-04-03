@@ -1,0 +1,106 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: efa6d2c67f44d744c9fc69c85903d763, type: 3}
+  m_Name: Drift
+  m_EditorClassIdentifier: Assembly-CSharp::CarHandlingSO
+  engineTorque: 400
+  brakeTorque: 4000
+  engineBrakeTorque: 300
+  maxSpeed: 180
+  steeringRange: 30
+  steeringRangeAtMaxSpeed: 12
+  maxSteerSpeed: 1.7
+  wheelBase: 2.7
+  trackWidth: 1.86
+  finalDrive: 3.4
+  gearRatios:
+  - 3.2
+  - 2.1
+  - 1.4
+  - 1
+  - 0.8
+  idleRpm: 900
+  redlineRpm: 5000
+  maxRpm: 6000
+  torqueCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0.35
+      inSlope: 2
+      outSlope: 2
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 0.12
+      value: 0.7
+      inSlope: 2.347004
+      outSlope: 2.347004
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.30392143
+    - serializedVersion: 3
+      time: 0.28
+      value: 1
+      inSlope: 0.0015016873
+      outSlope: 0.0015016873
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.8459311
+      outWeight: 1
+    - serializedVersion: 3
+      time: 0.5513428
+      value: 0.95
+      inSlope: -0.6558559
+      outSlope: -0.6558559
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.18229815
+      outWeight: 0.45835066
+    - serializedVersion: 3
+      time: 0.78
+      value: 0.7
+      inSlope: -2.1589143
+      outSlope: -2.1589143
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.10939212
+    - serializedVersion: 3
+      time: 1
+      value: 0.35
+      inSlope: -1.1007068
+      outSlope: -1.1007068
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.18484427
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  wheelspinGripLoss: 0.2
+  overrevGripLoss: 0.9
+  frontMinSidewaysGrip: 0.7
+  frontMaxSidewaysGrip: 1
+  frontNormalSidewaysGrip: 1
+  frontBrakeSidewaysGrip: 1
+  frontHandbrakeSidewaysGrip: 1
+  rearMinSidewaysGrip: 0.5
+  rearMaxSidewaysGrip: 1.15
+  rearNormalSidewaysGrip: 1
+  rearBrakeSidewaysGrip: 0.9
+  rearHandbrakeSidewaysGrip: 0.5
+  rumbleMinSpeedKph: 2

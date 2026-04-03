@@ -272,6 +272,55 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!1 &203443162705095117
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2460900322278738124}
+  - component: {fileID: 6822863007063165537}
+  m_Layer: 0
+  m_Name: LookAtTarget
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2460900322278738124
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 203443162705095117}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 6727642031844149641}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6822863007063165537
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 203443162705095117}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e04228c375106004a8e0a33665948f0b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::VelocityLookatTarget
+  car: {fileID: 6727642031844149641}
+  carRb: {fileID: 2567253062466383711}
+  lookAheadDistance: 0
+  smoothSpeed: 3
+  velocityBlend: 0.7
 --- !u!1 &272639924988296905
 GameObject:
   m_ObjectHideFlags: 0
@@ -464,6 +513,7 @@ GameObject:
   - component: {fileID: 8227580452372823748}
   - component: {fileID: 8322178315385640102}
   - component: {fileID: 5030054791579961677}
+  - component: {fileID: 3407323479961043388}
   m_Layer: 0
   m_Name: FreeLook Camera
   m_TagString: Untagged
@@ -479,8 +529,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 591135658192100464}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.24954972, y: 0.74866617, z: -0.40341294, w: 0.46312204}
-  m_LocalPosition: {x: -2.882331, y: 5.8918195, z: 1.4382359}
+  m_LocalRotation: {x: 0.39766413, y: 0.15526725, z: -0.06847518, w: 0.901702}
+  m_LocalPosition: {x: -1.2367839, y: 5.049036, z: -3.4847775}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -544,9 +594,9 @@ MonoBehaviour:
   TargetOffset: {x: 0, y: 0, z: 0}
   TrackerSettings:
     BindingMode: 1
-    PositionDamping: {x: 0.4, y: 0.4, z: 0.4}
+    PositionDamping: {x: 0.2, y: 0.4, z: 0.4}
     AngularDampingMode: 0
-    RotationDamping: {x: 1, y: 1, z: 1}
+    RotationDamping: {x: 0, y: 2, z: 0}
     QuaternionDamping: 1
   OrbitStyle: 1
   Radius: 5
@@ -563,17 +613,17 @@ MonoBehaviour:
     SplineCurvature: 0.5
   RecenteringTarget: 2
   HorizontalAxis:
-    Value: -146.43727
+    Value: -111.36552
     Center: 0
     Range: {x: -180, y: 180}
     Wrap: 1
     Recentering:
       Enabled: 1
-      Wait: 1
+      Wait: 3
       Time: 2
     Restrictions: 0
   VerticalAxis:
-    Value: 25.049534
+    Value: 0.15563887
     Center: 20
     Range: {x: -10, y: 45}
     Wrap: 0
@@ -690,6 +740,45 @@ MonoBehaviour:
         DecelTime: 0
   PlayerIndex: 1
   AutoEnableInputs: 1
+--- !u!114 &3407323479961043388
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 591135658192100464}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dbe43d662878a7c43bcd44d43c9e2094, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.Cinemachine::Unity.Cinemachine.CinemachineDeoccluder
+  CollideAgainst:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  IgnoreTag: 
+  TransparentLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  MinimumDistanceFromTarget: 3
+  AvoidObstacles:
+    Enabled: 1
+    DistanceLimit: 0
+    MinimumOcclusionTime: 0
+    CameraRadius: 0.4
+    UseFollowTarget:
+      Enabled: 0
+      YOffset: 0
+    Strategy: 0
+    MaximumEffort: 4
+    SmoothingTime: 0
+    Damping: 0.4
+    DampingWhenOccluded: 0.2
+  ShotQualityEvaluation:
+    Enabled: 0
+    OptimalDistance: 10
+    NearLimit: 5
+    FarLimit: 30
+    MaxQualityBoost: 0.2
 --- !u!1 &626734049107343014
 GameObject:
   m_ObjectHideFlags: 0
@@ -2935,6 +3024,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EngineAudioController
   engineSoundData: {fileID: 11400000, guid: 886306a679706df499b923005734ab2d, type: 2}
+  handling: {fileID: 0}
   carControl: {fileID: 1257251409558886400}
   fadeSpeed: 8
 --- !u!1 &1377836286866539992
@@ -3146,20 +3236,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5d0be560b0f11314087a782f648e1a51, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::WheelControl
-  wheelModel: {fileID: 5140870254598337189}
-  modelOffset: {x: -0.13, y: 0, z: 0}
-  skidSmoke: {fileID: 7420651616268000156}
-  skidThreshold: 0.5
-  minSidewaysGrip: 0.75
-  maxSidewaysGrip: 1.2
-  brakeSidewaysGrip: 0.6
-  normalSidewaysGrip: 1
-  handbrakeSidewaysGrip: 0.3
-  WheelCollider: {fileID: 0}
-  steerable: 0
-  motorized: 1
   side: 0
   isFront: 0
+  steerable: 0
+  motorized: 1
+  handling: {fileID: 11400000, guid: bb40301ef1425f045995cef223273049, type: 2}
+  wheelModel: {fileID: 5140870254598337189}
+  modelOffset: {x: -0.13, y: 0, z: 0}
+  minSidewaysGrip: 0.3
+  maxSidewaysGrip: 1.2
+  normalSidewaysGrip: 1
+  brakeSidewaysGrip: 0.8
+  handbrakeSidewaysGrip: 0.4
+  skidSmoke: {fileID: 7420651616268000156}
+  skidThreshold: 0.7
+  wheelCollider: {fileID: 0}
 --- !u!1 &1807307583363717754
 GameObject:
   m_ObjectHideFlags: 0
@@ -4185,20 +4276,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5d0be560b0f11314087a782f648e1a51, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::WheelControl
-  wheelModel: {fileID: 4317550138666198551}
-  modelOffset: {x: 0.13, y: 0, z: 0}
-  skidSmoke: {fileID: 6156378090699803635}
-  skidThreshold: 0.5
-  minSidewaysGrip: 0.75
-  maxSidewaysGrip: 1.2
-  brakeSidewaysGrip: 0.6
-  normalSidewaysGrip: 1
-  handbrakeSidewaysGrip: 0.3
-  WheelCollider: {fileID: 0}
-  steerable: 0
-  motorized: 1
   side: 1
   isFront: 0
+  steerable: 0
+  motorized: 1
+  handling: {fileID: 11400000, guid: bb40301ef1425f045995cef223273049, type: 2}
+  wheelModel: {fileID: 4317550138666198551}
+  modelOffset: {x: 0.13, y: 0, z: 0}
+  minSidewaysGrip: 0.3
+  maxSidewaysGrip: 1.2
+  normalSidewaysGrip: 1
+  brakeSidewaysGrip: 0.8
+  handbrakeSidewaysGrip: 0.4
+  skidSmoke: {fileID: 6156378090699803635}
+  skidThreshold: 0.7
+  wheelCollider: {fileID: 0}
 --- !u!1 &2701964141043907212
 GameObject:
   m_ObjectHideFlags: 0
@@ -5857,6 +5949,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EngineAudioController
   engineSoundData: {fileID: 11400000, guid: 6bd506d8fd65ccc47bc5f6f1ad6c9ad1, type: 2}
+  handling: {fileID: 0}
   carControl: {fileID: 1257251409558886400}
   fadeSpeed: 8
 --- !u!82 &1606206498871264903
@@ -7614,6 +7707,7 @@ Transform:
   - {fileID: 6813035019123499898}
   - {fileID: 5471136636901587945}
   - {fileID: 1493803125395673198}
+  - {fileID: 2460900322278738124}
   m_Father: {fileID: 2626073749796184776}
   m_LocalEulerAnglesHint: {x: 0, y: -90, z: 0}
 --- !u!54 &2567253062466383711
@@ -7655,88 +7749,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f1478e617646b934b9b70c7ec0896d20, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CarControlAfter
-  engineTorque: 500
-  brakeTorque: 4000
-  engineBrakeTorque: 300
-  maxSpeed: 200
-  steeringRange: 30
-  steeringRangeAtMaxSpeed: 12
-  maxSteerSpeed: 1.7
-  wheelBase: 2.7
-  trackWidth: 1.86
-  finalDrive: 3.4
-  gearRatios:
-  - 3.2
-  - 2.1
-  - 1.4
-  - 1
-  - 0.8
-  idleRPM: 1000
-  redlineRPM: 5000
-  maxRPM: 6000
-  overrevGripLoss: 0.9
-  torqueCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 0.3
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    - serializedVersion: 3
-      time: 0.1
-      value: 0.6
-      inSlope: 3.6869392
-      outSlope: 3.6869392
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0.17114402
-    - serializedVersion: 3
-      time: 0.3
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    - serializedVersion: 3
-      time: 0.6
-      value: 0.98
-      inSlope: -0.27270398
-      outSlope: -0.27270398
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.80305564
-    - serializedVersion: 3
-      time: 0.8
-      value: 0.8
-      inSlope: -2.3107417
-      outSlope: -2.3107417
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    - serializedVersion: 3
-      time: 1
-      value: 0.3
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  wheelspinGripLoss: 0.5
-  rumbleMinSpeedKph: 2
+  handling: {fileID: 11400000, guid: bb40301ef1425f045995cef223273049, type: 2}
   speedometer: {fileID: 809465162692052006}
   gearIndicator: {fileID: 2332151179078645508}
   rpmMeter: {fileID: 2467076039411768606}
@@ -9256,20 +9269,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5d0be560b0f11314087a782f648e1a51, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::WheelControl
-  wheelModel: {fileID: 4912601963150747604}
-  modelOffset: {x: 0.13, y: 0, z: 0}
-  skidSmoke: {fileID: 2432022391165928233}
-  skidThreshold: 0.5
-  minSidewaysGrip: 0.55
-  maxSidewaysGrip: 1
-  brakeSidewaysGrip: 0.5
-  normalSidewaysGrip: 1
-  handbrakeSidewaysGrip: 0.3
-  WheelCollider: {fileID: 0}
-  steerable: 1
-  motorized: 0
   side: 1
   isFront: 1
+  steerable: 1
+  motorized: 0
+  handling: {fileID: 11400000, guid: bb40301ef1425f045995cef223273049, type: 2}
+  wheelModel: {fileID: 4912601963150747604}
+  modelOffset: {x: 0.13, y: 0, z: 0}
+  minSidewaysGrip: 0.55
+  maxSidewaysGrip: 1
+  normalSidewaysGrip: 1
+  brakeSidewaysGrip: 1
+  handbrakeSidewaysGrip: 1
+  skidSmoke: {fileID: 2432022391165928233}
+  skidThreshold: 0.7
+  wheelCollider: {fileID: 0}
 --- !u!1 &6243125457961754744
 GameObject:
   m_ObjectHideFlags: 0
@@ -9621,20 +9635,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5d0be560b0f11314087a782f648e1a51, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::WheelControl
-  wheelModel: {fileID: 228825073707971410}
-  modelOffset: {x: -0.13, y: 0, z: 0}
-  skidSmoke: {fileID: 6655288234993518376}
-  skidThreshold: 0.5
-  minSidewaysGrip: 0.55
-  maxSidewaysGrip: 1
-  brakeSidewaysGrip: 0.5
-  normalSidewaysGrip: 1
-  handbrakeSidewaysGrip: 0.3
-  WheelCollider: {fileID: 0}
-  steerable: 1
-  motorized: 0
   side: 0
   isFront: 1
+  steerable: 1
+  motorized: 0
+  handling: {fileID: 11400000, guid: bb40301ef1425f045995cef223273049, type: 2}
+  wheelModel: {fileID: 228825073707971410}
+  modelOffset: {x: -0.13, y: 0, z: 0}
+  minSidewaysGrip: 0.55
+  maxSidewaysGrip: 1
+  normalSidewaysGrip: 1
+  brakeSidewaysGrip: 1
+  handbrakeSidewaysGrip: 1
+  skidSmoke: {fileID: 6655288234993518376}
+  skidThreshold: 0.7
+  wheelCollider: {fileID: 0}
 --- !u!1 &6442820020998882283
 GameObject:
   m_ObjectHideFlags: 0
@@ -12647,6 +12662,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EngineAudioController
   engineSoundData: {fileID: 11400000, guid: 226aa318048308a4788d1d8daad516d8, type: 2}
+  handling: {fileID: 11400000, guid: bb40301ef1425f045995cef223273049, type: 2}
   carControl: {fileID: 1257251409558886400}
   fadeSpeed: 8
 --- !u!1 &7539585756334536393
@@ -14036,7 +14052,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5714549173505110052, guid: fd2fba7ed2644b64c940fafdde1fe0f1, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0.292
+      value: 0.303
       objectReference: {fileID: 0}
     - target: {fileID: 5714549173505110052, guid: fd2fba7ed2644b64c940fafdde1fe0f1, type: 3}
       propertyPath: m_LocalRotation.w
@@ -14115,7 +14131,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5714549173505110052, guid: fd2fba7ed2644b64c940fafdde1fe0f1, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0.253
+      value: 0.264
       objectReference: {fileID: 0}
     - target: {fileID: 5714549173505110052, guid: fd2fba7ed2644b64c940fafdde1fe0f1, type: 3}
       propertyPath: m_LocalRotation.w
@@ -14190,11 +14206,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5714549173505110052, guid: fd2fba7ed2644b64c940fafdde1fe0f1, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.004
+      value: -0.225
       objectReference: {fileID: 0}
     - target: {fileID: 5714549173505110052, guid: fd2fba7ed2644b64c940fafdde1fe0f1, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0.286
+      value: 0.298
       objectReference: {fileID: 0}
     - target: {fileID: 5714549173505110052, guid: fd2fba7ed2644b64c940fafdde1fe0f1, type: 3}
       propertyPath: m_LocalRotation.w
@@ -14269,11 +14285,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5714549173505110052, guid: fd2fba7ed2644b64c940fafdde1fe0f1, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.023
+      value: -0.198
       objectReference: {fileID: 0}
     - target: {fileID: 5714549173505110052, guid: fd2fba7ed2644b64c940fafdde1fe0f1, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0.281
+      value: 0.293
       objectReference: {fileID: 0}
     - target: {fileID: 5714549173505110052, guid: fd2fba7ed2644b64c940fafdde1fe0f1, type: 3}
       propertyPath: m_LocalRotation.w

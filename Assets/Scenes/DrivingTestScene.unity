@@ -2210,7 +2210,7 @@ MonoBehaviour:
     highFrequency: 0.2
     intensityMultiplier: 0.8
     speedScaled: 0
-    sidewaysGrip: 0.1
+    sidewaysGrip: 0.4
   - name: Curb
     materials:
     - {fileID: 13400000, guid: b3e94c0701d05b547bb480d1c7795600, type: 2}

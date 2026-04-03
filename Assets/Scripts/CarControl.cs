@@ -92,7 +92,7 @@ public class CarControl : MonoBehaviour
         foreach (var w in wheels)
         {
             if (w.steerable)
-                w.WheelCollider.steerAngle = smoothSteer * steerAngle;
+                w.wheelCollider.steerAngle = smoothSteer * steerAngle;
         }
 
         // ---------- RPM FROM WHEELS ----------
@@ -102,7 +102,7 @@ public class CarControl : MonoBehaviour
         foreach (var w in wheels)
         {
             if (!w.motorized) continue;
-            wheelRPM += Mathf.Abs(w.WheelCollider.rpm);
+            wheelRPM += Mathf.Abs(w.wheelCollider.rpm);
             driven++;
         }
 
@@ -155,24 +155,24 @@ public class CarControl : MonoBehaviour
 
         foreach (var w in wheels)
         {
-            w.WheelCollider.motorTorque = 0f;
-            w.WheelCollider.brakeTorque = 0f;
+            w.wheelCollider.motorTorque = 0f;
+            w.wheelCollider.brakeTorque = 0f;
 
             if (!w.motorized)
                 continue;
 
             if (throttleInput > 0.01f)
             {
-                w.WheelCollider.motorTorque = baseTorque * dir;
+                w.wheelCollider.motorTorque = baseTorque * dir;
             }
             else if (rb.linearVelocity.magnitude > 0.5f)
             {
-                w.WheelCollider.brakeTorque = engineBrakeTorque;
+                w.wheelCollider.brakeTorque = engineBrakeTorque;
             }
 
             if (brakeInput > 0.01f)
             {
-                w.WheelCollider.brakeTorque =
+                w.wheelCollider.brakeTorque =
                     brakeInput * brakeTorque;
             }
 
